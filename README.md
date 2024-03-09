@@ -3,7 +3,7 @@ This repository contains the JAX prototype that accompanies the paper [_Probabil
 
 ## Overview of the artifact
 
-![architecture](./architecture.png)
+![architecture](architecture.png)
 
 The architecture of our artifact is shown above. It consists of two main components:
 
