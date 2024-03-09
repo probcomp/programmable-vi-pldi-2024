@@ -6,4 +6,5 @@ __pycache__
 .nox
 *.csv
 fig/*.pdf
-*.png
+fig/*.png
+.DS_Store
