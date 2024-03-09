@@ -5,5 +5,5 @@ __pycache__
 .ruff_cache
 .nox
 *.csv
-*.pdf
+fig/*.pdf
 *.png
