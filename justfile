@@ -3,9 +3,19 @@ gpu:
   pip install --upgrade torch==2.1.0 torchvision==0.16.0+cu118 --index-url https://download.pytorch.org/whl/cu118
   pip install jax[cuda11_local]==0.4.24 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
+# make fig_2_noisy_cone
+fig_2:
+  mkdir -p figs
+  poetry run python experiments/fig_2_noisy_cone/genjax_cone.py
+  poetry run python experiments/fig_2_noisy_cone/genjax_cone_marginal.py
+
 # make fig_7_air_estimator_evaluation
 fig_7:
+  mkdir -p figs
+  mkdir -p training_runs
   poetry run python experiments/fig_7_air_estimator_evaluation/genjax_enum_air.py
+  poetry run python experiments/fig_7_air_estimator_evaluation/genjax_mvd_air.py
+  poetry run python experiments/fig_7_air_estimator_evaluation/genjax_reinforce_air.py
 
 # generate the numbers for table_1_minibatch_gradient_benchmark
 table_1:
