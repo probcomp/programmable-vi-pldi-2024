@@ -769,89 +769,27 @@ def train(key, n=1, num_epochs=20, batch_size=64, learning_rate=1.0e-4):
     return losses, accuracy, wall_clock_times, params
 
 
-# Run with different random seeds.
-losses, accuracy, wall_clock_times = None, None, None
-for train_idx in range(0, 5):
-    key, sub_key = jax.random.split(key)
-    r_loss, r_acc, r_times, params = train(
-        sub_key, learning_rate=1.0e-4, n=1, batch_size=64, num_epochs=20
-    )
-    # Save run.
-    arr = np.array([r_loss, r_acc, r_times])
-    df = pd.DataFrame(
-        arr.T, columns=["ELBO loss", "Accuracy", "Epoch wall clock times"]
-    )
-    df.to_csv(
-        f"./training_runs/vi_air_reinforce_epochs_21_{train_idx}.csv",
-        index=False,
-    )
-    if losses is None:
-        losses = r_loss
-        accuracy = r_acc
-        wall_clock_times = r_times
-
-    else:
-        losses = np.vstack((losses, r_loss))
-        accuracy = np.vstack((accuracy, r_acc))
-        wall_clock_times = np.vstack((wall_clock_times, r_times))
-
-arr = np.array([losses, accuracy, wall_clock_times])
-mean_arr = jnp.mean(arr, axis=1)
-std_arr = jnp.std(arr, axis=1)
-df_arr = jnp.vstack((mean_arr, std_arr))
-df = pd.DataFrame(
-    df_arr.T,
-    columns=[
-        "Mean ELBO loss",
-        "Mean accuracy",
-        "Mean epoch wall clock times",
-        "Std ELBO loss",
-        "Std accuracy",
-        "Std epoch wall clock times",
-    ],
+key, sub_key = jax.random.split(key)
+r_loss, r_acc, r_times, params = train(
+    sub_key, learning_rate=1.0e-4, n=1, batch_size=64, num_epochs=20
 )
-df.to_csv("./training_runs/vi_air_reinforce_epochs_21.csv", index=False)
-
-
-# Run with different random seeds.
-losses, accuracy, wall_clock_times = None, None, None
-for train_idx in range(0, 5):
-    key, sub_key = jax.random.split(key)
-    r_loss, r_acc, r_times, params = train(
-        sub_key, learning_rate=1.0e-4, n=2, batch_size=1, num_epochs=20
-    )
-    # Save run.
-    arr = np.array([r_loss, r_acc, r_times])
-    df = pd.DataFrame(
-        arr.T, columns=["ELBO loss", "Accuracy", "Epoch wall clock times"]
-    )
-    df.to_csv(
-        f"./training_runs/vi_air_iwae_2_reinforce_epochs_21_{train_idx}.csv",
-        index=False,
-    )
-    if losses is None:
-        losses = r_loss
-        accuracy = r_acc
-        wall_clock_times = r_times
-
-    else:
-        losses = np.vstack((losses, r_loss))
-        accuracy = np.vstack((accuracy, r_acc))
-        wall_clock_times = np.vstack((wall_clock_times, r_times))
-
-arr = np.array([losses, accuracy, wall_clock_times])
-mean_arr = jnp.mean(arr, axis=1)
-std_arr = jnp.std(arr, axis=1)
-df_arr = jnp.vstack((mean_arr, std_arr))
-df = pd.DataFrame(
-    df_arr.T,
-    columns=[
-        "Mean ELBO loss",
-        "Mean accuracy",
-        "Mean epoch wall clock times",
-        "Std ELBO loss",
-        "Std accuracy",
-        "Std epoch wall clock times",
-    ],
+# Save run.
+arr = np.array([r_loss, r_acc, r_times])
+df = pd.DataFrame(arr.T, columns=["ELBO loss", "Accuracy", "Epoch wall clock times"])
+df.to_csv(
+    f"./training_runs/genjax_air_reinforce_epochs_21.csv",
+    index=False,
 )
-df.to_csv("./training_runs/genjax_air_iwae_2_reinforce_epochs_21.csv", index=False)
+
+
+key, sub_key = jax.random.split(key)
+r_loss, r_acc, r_times, params = train(
+    sub_key, learning_rate=1.0e-4, n=2, batch_size=1, num_epochs=20
+)
+# Save run.
+arr = np.array([r_loss, r_acc, r_times])
+df = pd.DataFrame(arr.T, columns=["ELBO loss", "Accuracy", "Epoch wall clock times"])
+df.to_csv(
+    f"./training_runs/genjax_air_iwae_2_reinforce_epochs_21.csv",
+    index=False,
+)
