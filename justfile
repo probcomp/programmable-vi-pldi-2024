@@ -1,7 +1,7 @@
 # get GPU jax
 gpu:
   pip install --upgrade torch==2.1.0 torchvision==0.16.0+cu118 --index-url https://download.pytorch.org/whl/cu118
-  pip install jax[cuda11_local]==0.4.24 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+  pip install jax[cuda11_local]==0.4.21 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 # make fig_2_noisy_cone
 # These are components for the overview figure for the paper.
@@ -12,6 +12,7 @@ fig_2:
 
 # make fig_7_air_estimator_evaluation
 # These are components for the AIR comparison between our system and Pyro.
+# NOTE: this will take a long time to run fully.
 fig_7:
   mkdir -p figs
   mkdir -p training_runs

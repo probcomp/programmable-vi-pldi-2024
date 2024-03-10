@@ -45,9 +45,6 @@ def model():
     return (x, y, z)
 
 
-pyro.render_model(model, model_args=())
-
-
 with pyro.plate("samples", 2000, dim=-1):
     samples = model()
 x, y, z = samples
@@ -85,9 +82,8 @@ losses = []
 for step in range(6000 if not smoke_test else 2):  # Consider running for more steps.
     loss = svi.step()
     losses.append(loss)
-    if step % 1000 == 0:
-        logging.info("Elbo loss: {}".format(loss))
 
+print("Pyro ELBO:")
 print((torch.tensor(losses)[5000:].mean(), torch.tensor(losses)[5000:].std()))
 
 
@@ -107,8 +103,6 @@ losses = []
 for step in range(6000 if not smoke_test else 2):  # Consider running for more steps.
     loss = svi.step()
     losses.append(loss)
-    if step % 1000 == 0:
-        logging.info("Elbo loss: {}".format(loss))
 
-
+print("Pyro IWAE(K = 5):")
 print((torch.tensor(losses)[5000:].mean(), torch.tensor(losses)[5000:].std()))

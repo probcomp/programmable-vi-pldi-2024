@@ -9,8 +9,6 @@ import equinox as eqx
 import jax
 import jax.numpy as jnp
 import numpy as np
-import seaborn as sns
-from matplotlib import rcParams
 from numpyro.examples.datasets import MNIST, load_dataset
 from tensorflow_probability.substrates import jax as tfp
 
@@ -20,9 +18,6 @@ from genjax.typing import Any
 
 console = genjax.pretty()
 key = jax.random.PRNGKey(314159)
-sns.set_theme(style="white")
-rcParams["figure.autolayout"] = True
-label_fontsize = 70  # Set the desired font size here
 
 train_init, train_fetch = load_dataset(MNIST, batch_size=4096, split="train")
 num_train, train_idx = train_init()

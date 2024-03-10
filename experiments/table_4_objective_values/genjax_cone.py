@@ -53,7 +53,7 @@ key = jax.random.PRNGKey(314159)
 ϕ = (0.0, 0.0, 1.0, 1.0)
 jitted = jax.jit(jax.vmap(objective.value_and_grad_estimate, in_axes=(0, None)))
 losses = []
-for i in range(0, 20000):
+for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
     loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
@@ -87,7 +87,7 @@ key = jax.random.PRNGKey(314159)
 ϕ = (3.0, 0.0, 1.0, 1.0)
 jitted = jax.jit(jax.vmap(iwae_objective.value_and_grad_estimate, in_axes=(0, None)))
 losses = []
-for i in range(0, 20000):
+for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 1)
     (
