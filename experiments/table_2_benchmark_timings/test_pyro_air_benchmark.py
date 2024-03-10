@@ -57,7 +57,7 @@ z_pres_prior_fn = make_prior(z_pres_prior)
 # Load data once for all tests
 @pytest.fixture(scope="session")
 def multi_mnist_data():
-    X, Y = multi_mnist.load(Path(__file__).parent / "data/air/.data")
+    X, Y = multi_mnist.load(Path(__file__).parent / "../../data/air/.data")
     X = torch.from_numpy(X).float() / 255.0
     # Using float to allow comparison with values sampled from
     # Bernoulli.
