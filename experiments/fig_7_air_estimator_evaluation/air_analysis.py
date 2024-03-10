@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 import matplotlib.font_manager as font_manager
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,87 +15,32 @@ rcParams["figure.autolayout"] = True
 label_fontsize = 70  # Set the desired font size here
 
 
-# In[2]:
-
-
-enum_air = pd.read_csv("./training_runs/genjax_air_enum_epochs_41_mccoy_prior.csv")
-
-
-# In[3]:
-
-
-reinforce_air = pd.read_csv(
-    "./training_runs/genjax_air_reinforce_epochs_41_mccoy_prior.csv"
-)
-
-
-# In[4]:
-
-
+enum_air = pd.read_csv("./training_runs/genjax_air_enum_epochs_41.csv")
+reinforce_air = pd.read_csv("./training_runs/genjax_air_reinforce_epochs_41.csv")
 reinforce_iwae_air = pd.read_csv(
-    "./training_runs/genjax_air_iwae_2_reinforce_epochs_41_mccoy_prior.csv"
+    "./training_runs/genjax_air_iwae_2_reinforce_epochs_41.csv"
 )
-
-
-# In[5]:
-
-
-mvd_air = pd.read_csv("./training_runs/genjax_air_mvd_epochs_41_mccoy_prior.csv")
-
-
-# In[6]:
-
-
-mvd_iwae_air = pd.read_csv(
-    "./training_runs/genjax_air_iwae_2_mvd_epochs_41_mccoy_prior.csv"
-)
-
-
-# In[7]:
-
-
-arr = np.array(mvd_iwae_air["Mean epoch wall clock times"])
-(np.mean(arr[1:] - arr[0:-1]), np.std(arr[1:] - arr[0:-1]))
-
-
-# In[8]:
-
-
-pyro_reinforce_air = pd.read_csv(
-    "./training_runs/pyro_air_reinforce_epochs_41_mccoy_prior_0.csv",
-)
-pyro_reinforce_air
-
-
-# In[9]:
-
-
-pyro_reinforce_baselines_air = pd.read_csv(
-    "./training_runs/pyro_air_reinforce_baselines_epochs_41_mccoy_prior_0.csv",
-)
-pyro_reinforce_baselines_air
-
-
-# In[10]:
-
-
+mvd_air = pd.read_csv("./training_runs/genjax_air_mvd_epochs_41.csv")
+mvd_iwae_air = pd.read_csv("./training_runs/genjax_air_iwae_2_mvd_epochs_41.csv")
 hybrid_mvd_air = pd.read_csv(
-    "./training_runs/genjax_air_hybrid_mvd_enum_epochs_41_mccoy_prior.csv",
+    "./training_runs/genjax_air_hybrid_mvd_enum_epochs_41.csv",
 )
-hybrid_mvd_air
-
-
-# In[11]:
-
-
 hybrid_iwae_mvd_air = pd.read_csv(
-    "./training_runs/genjax_air_iwae_2_hybrid_mvd_enum_epochs_41_mccoy_prior.csv",
+    "./training_runs/genjax_air_iwae_2_hybrid_mvd_enum_epochs_41.csv",
 )
-hybrid_iwae_mvd_air
-
-
-# In[12]:
-
+rws_air_bz1_mvd = pd.read_csv(
+    "./training_runs/genjax_air_rws_10_mvd_batch_size_1_epochs_21.csv"
+)
+rws_air_mvd = pd.read_csv("./training_runs/genjax_air_rws_10_mvd_epochs_201.csv")
+pyro_reinforce_air = pd.read_csv(
+    "./training_runs/pyro_air_reinforce_epochs_41_0.csv",
+)
+pyro_reinforce_baselines_air = pd.read_csv(
+    "./training_runs/pyro_air_reinforce_baselines_epochs_41_0.csv",
+)
+pyro_rws_air = pd.read_csv(
+    "./training_runs/pyro_air_rws_epochs_6_0.csv",
+)
 
 plt.rcParams["text.usetex"] = False
 fig = plt.figure(figsize=(10, 12), dpi=240)
@@ -113,9 +55,6 @@ ax2.tick_params(axis="both", which="major", labelsize=label_fontsize / 3.2)
 ax2.set_xscale("log")
 ax3.tick_params(axis="both", which="major", labelsize=label_fontsize / 3.2)
 ax3.set_xscale("log")
-
-
-# In[13]:
 
 
 def go_plot(
@@ -151,9 +90,6 @@ def go_plot(
             alpha=0.2,
         )
     return l
-
-
-# In[14]:
 
 
 ax1.set_ylim(250, 650)
@@ -269,10 +205,6 @@ pyro_r_b_l = go_plot(
     invert_for_pyro=True,
 )
 ax1.set_ylabel("Objective", fontsize=label_fontsize / 3)
-fig
-
-
-# In[15]:
 
 
 num_lines = 7  # Number of lines you want to plot
@@ -393,8 +325,6 @@ fig
 
 # ## RWS
 
-# In[16]:
-
 
 def go_plot_rws(ax, df, x, mean, label, cmap, color_idx, marker):
     return ax.plot(
@@ -406,46 +336,11 @@ def go_plot_rws(ax, df, x, mean, label, cmap, color_idx, marker):
     )
 
 
-# In[17]:
-
-
-rws_air_bz1_mvd = pd.read_csv(
-    "./training_runs/genjax_air_rws_10_mvd_batch_size_1_epochs_21_mccoy_prior.csv"
-)
-
-
-# In[18]:
-
-
-rws_air_bz1_mvd
-
-
-# In[19]:
-
-
-rws_air_mvd = pd.read_csv(
-    "./training_runs/genjax_air_rws_10_mvd_epochs_201_mccoy_prior.csv"
-)
-
-
-# In[20]:
-
-
-pyro_rws_air = pd.read_csv(
-    "./training_runs/pyro_air_rws_epochs_6_mccoy_prior_0.csv",
-)
-
-
-# In[21]:
-
-
 ax3.set_ylim(0.6, 1.0)
 ax3.text(760, 0.67, "t ~ 16 mins", color="black", zorder=3, fontsize=label_fontsize / 4)
 
-num_lines = 2  # Number of lines you want to plot
-cmap = plt.cm.get_cmap(
-    "cividis", num_lines
-)  # Replace 'viridis' with your chosen colormap
+num_lines = 2
+cmap = plt.cm.get_cmap("cividis", num_lines)
 
 rws_air_bz1_l = go_plot_rws(
     ax3,
@@ -482,11 +377,6 @@ pyro_rws_l = go_plot_rws(
 
 ax3.set_xlabel("Time (s)", fontsize=label_fontsize / 3)
 ax3.set_ylabel("Accuracy", fontsize=label_fontsize / 3)
-fig
-
-
-# In[22]:
-
 
 handles, labels = [], []
 for ax in [ax1, ax3]:
@@ -500,10 +390,4 @@ ax4.set_frame_on(False)
 ax4.get_xaxis().set_visible(False)
 ax4.get_yaxis().set_visible(False)
 fig.tight_layout()
-fig.savefig("./img/air_collat.pdf", format="pdf")
-
-
-# In[23]:
-
-
-fig
+fig.savefig("./fig/fig_2_air_full.pdf", format="pdf")

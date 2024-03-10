@@ -128,6 +128,7 @@ for batch_size in batch_sizes:
     std_ds.append(jnp.std(jnp.array(durations)))
 
 print("GenJAX VI timings:")
+print(f"Batch sizes: {batch_sizes}")
 print((1000 * np.array(vi_runtime_over_batches), 1000 * np.array(std_ds)))
 
 
@@ -182,4 +183,5 @@ for batch_size in batch_sizes:
     hand_std_ds.append(jnp.std(jnp.array(durations)))
 
 print("Handcoded timings:")
+print(f"Batch sizes: {batch_sizes}")
 print((1000.0 * np.array(hand_runtime_over_batches), 1000.0 * np.array(hand_std_ds)))
