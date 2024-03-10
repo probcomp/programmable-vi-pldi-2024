@@ -655,7 +655,7 @@ params = (decoder, rnn, encoder, predict)
 evaluate_accuracy = count_accuracy(mnist, true_counts, guide, batch_size=1000)
 
 
-def train(key, n=1, num_epochs=20, batch_size=64, learning_rate=1.0e-3):
+def train(key, n=1, num_epochs=40, batch_size=64, learning_rate=1.0e-3):
     def svi_update(model, guide, optimiser):
         def batch_updater(key, params, opt_state, data_batch):
             def grads(key, params, data):
@@ -744,14 +744,19 @@ def train(key, n=1, num_epochs=20, batch_size=64, learning_rate=1.0e-3):
     return losses, accuracy, wall_clock_times, params
 
 
+num_epochs = 40
 key, sub_key = jax.random.split(key)
 r_loss, r_acc, r_times, params = train(
-    sub_key, learning_rate=1.0e-4, n=1, batch_size=64, num_epochs=20
+    sub_key,
+    learning_rate=1.0e-4,
+    n=1,
+    batch_size=64,
+    num_epochs=num_epochs,
 )
 # Save run.
 arr = np.array([r_loss, r_acc, r_times])
 df = pd.DataFrame(arr.T, columns=["ELBO loss", "Accuracy", "Epoch wall clock times"])
 df.to_csv(
-    f"./training_runs/genjax_air_enum_epochs_21.csv",
+    f"./training_runs/genjax_air_enum_epochs_{num_epochs}.csv",
     index=False,
 )

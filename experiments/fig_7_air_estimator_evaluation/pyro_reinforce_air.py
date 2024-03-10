@@ -23,7 +23,7 @@ from pyro_air import AIR, count_accuracy, get_per_param_lr
 seed = 123456
 use_cuda = torch.cuda.is_available()
 batch_size = 64
-num_epoches = 21
+num_epoches = 41
 
 z_pres_prior = 0.01
 learning_rate = 1e-4

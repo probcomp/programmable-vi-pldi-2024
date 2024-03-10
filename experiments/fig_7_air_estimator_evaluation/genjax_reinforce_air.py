@@ -43,18 +43,6 @@ mnist = jnp.array(X_np)
 true_counts = jnp.array([len(objs) for objs in Y])
 
 
-def show_images(imgs):
-    plt.figure(figsize=(8, 2))
-    for i, img in enumerate(imgs):
-        ax = plt.subplot(1, len(imgs), i + 1)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        plt.imshow(img, cmap="gray_r")
-
-
-show_images(mnist[9:14])
-
-
 # ## Defining the variational ingredients
 
 # ### Utilities / learnable pieces
@@ -681,7 +669,7 @@ visualize_examples = mnist[5:10]
 visualize = visualize_model(model, guide)
 
 
-def train(key, n=1, num_epochs=20, batch_size=64, learning_rate=1.0e-4):
+def train(key, n=1, num_epochs=40, batch_size=64, learning_rate=1.0e-4):
     def svi_update(model, guide, optimiser):
         def batch_updater(key, params, opt_state, data_batch):
             def grads(key, params, data):
@@ -771,25 +759,25 @@ def train(key, n=1, num_epochs=20, batch_size=64, learning_rate=1.0e-4):
 
 key, sub_key = jax.random.split(key)
 r_loss, r_acc, r_times, params = train(
-    sub_key, learning_rate=1.0e-4, n=1, batch_size=64, num_epochs=20
+    sub_key, learning_rate=1.0e-4, n=1, batch_size=64, num_epochs=40
 )
 # Save run.
 arr = np.array([r_loss, r_acc, r_times])
 df = pd.DataFrame(arr.T, columns=["ELBO loss", "Accuracy", "Epoch wall clock times"])
 df.to_csv(
-    f"./training_runs/genjax_air_reinforce_epochs_21.csv",
+    f"./training_runs/genjax_air_reinforce_epochs_41.csv",
     index=False,
 )
 
 
 key, sub_key = jax.random.split(key)
 r_loss, r_acc, r_times, params = train(
-    sub_key, learning_rate=1.0e-4, n=2, batch_size=1, num_epochs=20
+    sub_key, learning_rate=1.0e-4, n=2, batch_size=1, num_epochs=40
 )
 # Save run.
 arr = np.array([r_loss, r_acc, r_times])
 df = pd.DataFrame(arr.T, columns=["ELBO loss", "Accuracy", "Epoch wall clock times"])
 df.to_csv(
-    f"./training_runs/genjax_air_iwae_2_reinforce_epochs_21.csv",
+    f"./training_runs/genjax_air_iwae_2_reinforce_epochs_41.csv",
     index=False,
 )
