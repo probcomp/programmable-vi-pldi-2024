@@ -119,7 +119,16 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
+    (
+        loss,
+        (
+            _,
+            (
+                _,
+                ϕ_grads,
+            ),
+        ),
+    ) = jitted(sub_keys, ((), (data, ϕ)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     losses.append(jnp.mean(loss))
     if i % 1000 == 0:
@@ -132,7 +141,6 @@ print(ϕ)
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 50000)
-data = genjax.choice_map({"z": 5.0})
 tr = jax.jit(jax.vmap(variational_family.simulate, in_axes=(0, None)))(
     sub_keys, (data, ϕ)
 )
@@ -165,7 +173,16 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
+    (
+        loss,
+        (
+            _,
+            (
+                _,
+                ϕ_grads,
+            ),
+        ),
+    ) = jitted(sub_keys, ((), (data, ϕ)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
@@ -175,7 +192,6 @@ print(ϕ)
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 50000)
-data = genjax.choice_map({"z": 5.0})
 tr = jax.jit(jax.vmap(variational_family.simulate, in_axes=(0, None)))(
     sub_keys, (data, ϕ)
 )
@@ -211,7 +227,6 @@ fig.savefig("./fig/fig_2_naive_variational_elbo_samples_2.pdf", format="pdf")
 # ## 5 particle IWAE
 
 
-data = genjax.choice_map({"z": 5.0})
 iwae_objective = vi.iwae_elbo(model, variational_family, data, 5)
 
 
@@ -223,7 +238,16 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 1)
-    loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
+    (
+        loss,
+        (
+            _,
+            (
+                _,
+                ϕ_grads,
+            ),
+        ),
+    ) = jitted(sub_keys, ((), (data, ϕ)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
@@ -234,7 +258,6 @@ print(ϕ)
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 50000)
-data = genjax.choice_map({"z": 5.0})
 tr = jax.jit(jax.vmap(variational_family.simulate, in_axes=(0, None)))(
     sub_keys, (data, ϕ)
 )
@@ -288,7 +311,6 @@ print(ϕ)
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 50000)
-data = genjax.choice_map({"z": 5.0})
 tr = jax.jit(jax.vmap(variational_family.simulate, in_axes=(0, None)))(
     sub_keys, (data, ϕ)
 )
@@ -332,7 +354,16 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
+    (
+        loss,
+        (
+            _,
+            (
+                _,
+                ϕ_grads,
+            ),
+        ),
+    ) = jitted(sub_keys, ((), (data, ϕ)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
@@ -342,7 +373,6 @@ print(ϕ)
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 50000)
-data = genjax.choice_map({"z": 5.0})
 tr = jax.jit(jax.vmap(variational_family.simulate, in_axes=(0, None)))(
     sub_keys, (data, ϕ)
 )
@@ -388,7 +418,6 @@ def hacky_variational_family(tgt):
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 50000)
-data = genjax.choice_map({"z": 5.0})
 chm_variational = gensp.choice_map_distribution(hacky_variational_family)
 sir = gensp.CustomImportance(50, chm_variational)
 scores, v_chm = jax.vmap(sir.random_weighted, in_axes=(0, None))(

@@ -49,7 +49,19 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ,), ())))
+    (
+        loss,
+        (
+            _,
+            (
+                (
+                    _,
+                    ϕ_grads,
+                ),
+                (),
+            ),
+        ),
+    ) = jitted(sub_keys, ((), ((data, ϕ), ())))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
@@ -59,7 +71,7 @@ print(ϕ)
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ,), ())))
+loss, (_, ((_, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
 print("HVI-ELBO(N = 1):")
 print((jnp.mean(loss), jnp.var(loss)))
 
@@ -71,7 +83,6 @@ marginal_q = vi.marginal(
     genjax.select("x", "y"), expressive_variational_family, lambda: vi.sir(5)
 )
 
-data = genjax.choice_map({"z": 5.0})
 hvi_objective = vi.iwae_elbo(model, marginal_q, data, 1)
 
 # Training with IWAE.
@@ -82,7 +93,7 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ,), ())))
+    loss, (_, ((_, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     losses.append(jnp.mean(loss))
 
@@ -97,7 +108,6 @@ marginal_q = vi.marginal(
     genjax.select("x", "y"), expressive_variational_family, lambda: vi.sir(5)
 )
 
-data = genjax.choice_map({"z": 5.0})
 hvi_objective = vi.iwae_elbo(model, marginal_q, data, 5)
 
 # Training with IWAE.
@@ -108,12 +118,12 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ,), ())))
+    loss, (_, ((_, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     losses.append(jnp.mean(loss))
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ,), ())))
+loss, (_, ((_, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
 print("HVIWAE(N = 5, K = 5):")
 print((jnp.mean(loss), jnp.var(loss)))

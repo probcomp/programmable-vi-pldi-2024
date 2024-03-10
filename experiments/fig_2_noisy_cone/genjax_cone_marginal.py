@@ -55,7 +55,7 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ,), ())))
+    loss, (_, ((data, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
@@ -71,7 +71,7 @@ sub_keys = jax.random.split(sub_key, 50000)
 data = genjax.choice_map({"z": 5.0})
 ϕ_prior = (-0.3, -0.3)
 scores, v_chm = jax.jit(jax.vmap(marginal_q.random_weighted, in_axes=(0, None, None)))(
-    sub_keys, (ϕ_prior, data), ()
+    sub_keys, (data, ϕ_prior), ()
 )
 
 
@@ -199,7 +199,7 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, ((ϕ_grads, _), ())) = jitted(sub_keys, ((), ((ϕ, data), ())))
+    loss, (_, ((data, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))

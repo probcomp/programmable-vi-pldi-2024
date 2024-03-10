@@ -56,7 +56,7 @@ losses = []
 for i in range(0, 20000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
+    loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     losses.append(jnp.mean(loss))
 
@@ -66,7 +66,7 @@ for i in range(0, 20000):
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
+loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
 print("ELBO:")
 print((jnp.mean(loss), jnp.var(loss)))
 
@@ -79,7 +79,6 @@ print((jnp.mean(loss), jnp.var(loss)))
 # ## 5 particle IWAE
 
 
-data = genjax.choice_map({"z": 5.0})
 iwae_objective = vi.iwae_elbo(model, variational_family, data, 5)
 
 
@@ -91,12 +90,21 @@ losses = []
 for i in range(0, 20000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 1)
-    loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
+    (
+        loss,
+        (
+            _,
+            (
+                _,
+                ϕ_grads,
+            ),
+        ),
+    ) = jitted(sub_keys, ((), (data, ϕ)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     losses.append(jnp.mean(loss))
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, (_,)) = jitted(sub_keys, ((), (ϕ,)))
+loss, (_, (_, _)) = jitted(sub_keys, ((), (data, ϕ)))
 print("IWAE(K = 5):")
 print((jnp.mean(loss), jnp.var(loss)))
