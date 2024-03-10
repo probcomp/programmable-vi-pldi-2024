@@ -93,7 +93,7 @@ ax2.set_yticks([])
 ax2.set_zticks([])
 ax2.view_init(elev=0, azim=-90)
 plt.tight_layout()
-fig.savefig("./fig/fig_2_model_prior.pdf", format="pdf")
+fig.savefig("./figs/fig_2_model_prior.pdf", format="pdf")
 
 
 # ## Naive variational guide
@@ -133,7 +133,6 @@ for i in range(0, 5000):
     losses.append(jnp.mean(loss))
     if i % 1000 == 0:
         print(jnp.mean(loss))
-print(ϕ)
 
 
 # ### Sampling from the trained variational family
@@ -162,7 +161,7 @@ ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
-fig.savefig("./fig/fig_2_naive_variational_elbo_samples.pdf", format="pdf")
+fig.savefig("./figs/fig_2_naive_variational_elbo_samples.pdf", format="pdf")
 
 
 # Training.
@@ -187,7 +186,6 @@ for i in range(0, 5000):
     if i % 1000 == 0:
         print(jnp.mean(loss))
     losses.append(jnp.mean(loss))
-print(ϕ)
 
 
 key, sub_key = jax.random.split(key)
@@ -216,7 +214,7 @@ ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
 
-fig.savefig("./fig/fig_2_naive_variational_elbo_samples_2.pdf", format="pdf")
+fig.savefig("./figs/fig_2_naive_variational_elbo_samples_2.pdf", format="pdf")
 
 # ## Training with IWAE
 
@@ -253,8 +251,6 @@ for i in range(0, 5000):
         print(jnp.mean(loss))
     losses.append(jnp.mean(loss))
 
-print(ϕ)
-
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 50000)
@@ -282,7 +278,7 @@ ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
 
-fig.savefig("./fig/fig_2_naive_variational_iwae_elbo_5_samples.pdf", format="pdf")
+fig.savefig("./figs/fig_2_naive_variational_iwae_elbo_5_samples.pdf", format="pdf")
 
 
 # ## 20 particle IWAE
@@ -301,13 +297,11 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
+    loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
     losses.append(jnp.mean(loss))
-print(ϕ)
-
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 50000)
@@ -334,67 +328,7 @@ ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
-fig.savefig("./fig/fig_2_naive_variational_iwae_elbo_20_samples.pdf", format="pdf")
-
-
-# ## 50 particle IWAE
-# NOTE: slow to run, because vmap + ADEV is not
-# yet fully supported.
-
-iwae_objective = vi.iwae_elbo(
-    model, variational_family, genjax.choice_map({"z": 5.0}), 50
-)
-
-
-# Training with IWAE.
-key = jax.random.PRNGKey(314159)
-ϕ = (3.0, 0.0, 1.0, 1.0)
-jitted = jax.jit(jax.vmap(iwae_objective.value_and_grad_estimate, in_axes=(0, None)))
-losses = []
-for i in range(0, 5000):
-    key, sub_key = jax.random.split(key)
-    sub_keys = jax.random.split(sub_key, 64)
-    (
-        loss,
-        (
-            _,
-            (
-                _,
-                ϕ_grads,
-            ),
-        ),
-    ) = jitted(sub_keys, ((), (data, ϕ)))
-    ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
-    if i % 1000 == 0:
-        print(jnp.mean(loss))
-    losses.append(jnp.mean(loss))
-print(ϕ)
-
-
-key, sub_key = jax.random.split(key)
-sub_keys = jax.random.split(sub_key, 50000)
-tr = jax.jit(jax.vmap(variational_family.simulate, in_axes=(0, None)))(
-    sub_keys, (data, ϕ)
-)
-chm = tr.strip()
-x, y = chm["x"], chm["y"]
-scores = jnp.exp(tr.get_score())
-fig, ax = plt.subplots(figsize=(12, 12))
-ax.set_aspect("equal")
-ax.scatter(x, y, c=scores, cmap="viridis", marker=".", s=20)
-circle = patches.Circle((0.0, 0.0), radius=jnp.sqrt(5.0), fc="none", ec="black", lw=4)
-ax.add_patch(circle)
-ax.text(-2.0, 2.3, "z = 5.0", ha="center", va="center", fontsize=label_fontsize)
-ax.set_xlim(-3, 3)
-ax.set_ylim(-3, 3)
-ax.set_xlabel("x", fontsize=label_fontsize)
-ax.set_ylabel("y", fontsize=label_fontsize)
-ax.set_xticks([])
-ax.set_yticks([])
-ax.yaxis.labelpad = 18  # adjust the value as needed
-ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
-plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
-fig.savefig("./fig/fig_2_naive_variational_iwae_elbo_50_samples.pdf", format="pdf")
+fig.savefig("./figs/fig_2_naive_variational_iwae_elbo_20_samples.pdf", format="pdf")
 
 
 # ### Plotting inference results using SIR.
@@ -419,7 +353,7 @@ def hacky_variational_family(tgt):
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 50000)
 chm_variational = gensp.choice_map_distribution(hacky_variational_family)
-sir = gensp.CustomImportance(50, chm_variational)
+sir = gensp.CustomImportance(20, chm_variational)
 scores, v_chm = jax.vmap(sir.random_weighted, in_axes=(0, None))(
     sub_keys, gensp.target(hacky_model, (ϕ,), data)
 )
@@ -443,4 +377,4 @@ ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
-fig.savefig("./fig/fig_2_naive_variational_iwae_elbo_50_sir_samples.pdf", format="pdf")
+fig.savefig("./figs/fig_2_naive_variational_iwae_elbo_20_sir_samples.pdf", format="pdf")

@@ -55,12 +55,11 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, ((data, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
+    loss, (_, ((_, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
     losses.append(jnp.mean(loss))
-print(ϕ)
 
 
 # ## Sampling from the prior variational family
@@ -68,7 +67,6 @@ print(ϕ)
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 50000)
-data = genjax.choice_map({"z": 5.0})
 ϕ_prior = (-0.3, -0.3)
 scores, v_chm = jax.jit(jax.vmap(marginal_q.random_weighted, in_axes=(0, None, None)))(
     sub_keys, (data, ϕ_prior), ()
@@ -95,7 +93,7 @@ ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
 fig.savefig(
-    "./fig/fig_2_untrained_expressive_variational_elbo_samples.pdf", format="pdf"
+    "./figs/fig_2_untrained_expressive_variational_elbo_samples.pdf", format="pdf"
 )
 
 # ## Sampling from trained variational family
@@ -103,9 +101,8 @@ fig.savefig(
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 100000)
-data = genjax.choice_map({"z": 5.0})
 scores, v_chm = jax.jit(jax.vmap(marginal_q.random_weighted, in_axes=(0, None, None)))(
-    sub_keys, (ϕ, data), ()
+    sub_keys, (data, ϕ), ()
 )
 
 
@@ -127,7 +124,7 @@ ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
-fig.savefig("./fig/fig_2_hvi_expressive_variational_elbo_samples.pdf", format="pdf")
+fig.savefig("./figs/fig_2_hvi_expressive_variational_elbo_samples.pdf", format="pdf")
 
 # ### Training with HVI & IWAE.
 
@@ -135,7 +132,6 @@ marginal_q = vi.marginal(
     genjax.select("x", "y"), expressive_variational_family, lambda: vi.sir(5)
 )
 
-data = genjax.choice_map({"z": 5.0})
 hvi_objective = vi.iwae_elbo(model, marginal_q, data, 1)
 
 # Training with IWAE.
@@ -146,18 +142,16 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, ((ϕ_grads, _), ())) = jitted(sub_keys, ((), ((ϕ, data), ())))
+    loss, (_, ((_, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
     losses.append(jnp.mean(loss))
-print(ϕ)
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 100000)
-data = genjax.choice_map({"z": 5.0})
 scores, v_chm = jax.jit(jax.vmap(marginal_q.random_weighted, in_axes=(0, None, None)))(
-    sub_keys, (ϕ, data), ()
+    sub_keys, (data, ϕ), ()
 )
 
 chm = v_chm.get_leaf_value()
@@ -180,7 +174,7 @@ ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
 
 fig.savefig(
-    "./fig/fig_2_iwhvi_trained_expressive_variational_elbo_samples.pdf", format="pdf"
+    "./figs/fig_2_iwhvi_trained_expressive_variational_elbo_samples.pdf", format="pdf"
 )
 
 
@@ -188,7 +182,6 @@ marginal_q = vi.marginal(
     genjax.select("x", "y"), expressive_variational_family, lambda: vi.sir(5)
 )
 
-data = genjax.choice_map({"z": 5.0})
 hvi_objective = vi.iwae_elbo(model, marginal_q, data, 5)
 
 # Training with IWAE.
@@ -199,18 +192,16 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, ((data, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
+    loss, (_, ((_, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
     losses.append(jnp.mean(loss))
-print(ϕ)
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 100000)
-data = genjax.choice_map({"z": 5.0})
 tgt = genjax.gensp.target(model, (), data)
-approx = vi.sir(5, marginal_q, ((ϕ, data), ()))
+approx = vi.sir(5, marginal_q, ((data, ϕ), ()))
 scores, v_chm = jax.jit(jax.vmap(approx.simulate, in_axes=(0, None)))(sub_keys, tgt)
 chm = v_chm.get_leaf_value()
 x, y = chm["x"], chm["y"]
@@ -231,5 +222,5 @@ ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
 
 fig.savefig(
-    "./fig/fig_2_diwhvi_trained_expressive_variational_elbo_samples.pdf", format="pdf"
+    "./figs/fig_2_diwhvi_trained_expressive_variational_elbo_samples.pdf", format="pdf"
 )

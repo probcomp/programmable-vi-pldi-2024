@@ -5,6 +5,6 @@ __pycache__
 .ruff_cache
 .nox
 *.csv
-fig/*.pdf
-fig/*.png
+figs/*.pdf
+figs/*.png
 .DS_Store
