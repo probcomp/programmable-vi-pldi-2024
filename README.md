@@ -26,16 +26,20 @@ Each directory contains the code used to create an artifact in the submission.
 
 ### Setting up your environment
 
-We utilize [`poetry`](https://python-poetry.org/docs/#installation) to manage Python dependencies, and utilize [`just`](https://github.com/casey/just) as a command runner. At a bare minimum, you'll need to install `poetry`, but we also recommend installing `just` to utilize some of our convenience commands (to run experiments).
+We utilize [`poetry`](https://python-poetry.org/docs/#installation) to manage Python dependencies, and utilize [`just`](https://github.com/casey/just) as a command runner. At a bare minimum, you'll need to install `poetry`, but we also recommend installing `just` to utilize some of our convenience commands (to run experiments, and get compatible versions of `torch` and `jaxlib`).
 
 With `poetry` installed, you can use `poetry shell` to create a virtual environment. Run:
 ```
 poetry shell
 poetry install
 ```
-to install the Python dependencies.
+to instantiate a virtual environment and install the Python dependencies.
 
-If you have access to a CUDA enabled GPU, we've setup a convenient command to install `torch` and `jaxlib` with support for CUDA 11:
+### GPU acceleration
+
+Several of our experiments are computationally intensive, and we recommend GPU acceleration.
+
+For GPU acceleration, we assume access to a CUDA 11 enabled environment, we've setup a convenient command to install `torch` and `jaxlib` with support for CUDA 11:
 ```
 just gpu
 ```
