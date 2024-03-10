@@ -30,7 +30,7 @@ def model():
 
 # A more expressive variational family.
 @genjax.gen
-def expressive_variational_family(ϕ, data):
+def expressive_variational_family(data, ϕ):
     z = data["z"]
     u = vi.uniform() @ "u"
     θ = 2 * jnp.pi * u
@@ -52,21 +52,15 @@ key = jax.random.PRNGKey(314159)
 ϕ = (0.0, 0.0)
 jitted = jax.jit(jax.vmap(hvi_objective.value_and_grad_estimate, in_axes=(0, None)))
 losses = []
-for i in range(0, 20000):
+for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, ((ϕ_grads, _), ())) = jitted(sub_keys, ((), ((ϕ, data), ())))
+    loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ, ), ())))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
     losses.append(jnp.mean(loss))
 print(ϕ)
-
-
-key, sub_key = jax.random.split(key)
-sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, ((ϕ_grads, _), ())) = jitted(sub_keys, ((), ((ϕ, data), ())))
-jnp.mean(loss)
 
 
 # ## Sampling from the prior variational family
@@ -86,19 +80,11 @@ x, y = chm["x"], chm["y"]
 scores = jnp.exp(scores)
 
 fig, ax = plt.subplots(figsize=(12, 12))
-
-# Define the circle
 circle = patches.Circle((0.0, 0.0), radius=jnp.sqrt(5.0), fc="none", ec="black", lw=4)
-
-# Set aspect ratio to equal to ensure the circle isn't elliptical
 ax.set_aspect("equal")
-
 ax.scatter(x, y, c=scores, cmap="viridis", marker=".", s=20)
-# Add the circle to the plot
 ax.add_patch(circle)
 ax.text(2.0, 2.3, "z = 5.0", ha="center", va="center", fontsize=label_fontsize)
-
-# Set the limits of the plot
 ax.set_xlim(-3, 3)
 ax.set_ylim(-3, 3)
 ax.set_xlabel("x", fontsize=label_fontsize)
@@ -107,14 +93,8 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
-
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
-
-fig.savefig("img/untrained_expressive_variational_elbo_samples.pdf", format="pdf")
-
-# Show the plot
-plt.show()
-
+fig.savefig("./fig/fig_2_untrained_expressive_variational_elbo_samples.pdf", format="pdf")
 
 # ## Sampling from trained variational family
 
@@ -130,22 +110,12 @@ scores, v_chm = jax.jit(jax.vmap(marginal_q.random_weighted, in_axes=(0, None, N
 chm = v_chm.get_leaf_value()
 x, y = chm["x"], chm["y"]
 scores = jnp.exp(scores)
-
 fig, ax = plt.subplots(figsize=(12, 12))
-
-# Set aspect ratio to equal to ensure the circle isn't elliptical
 ax.set_aspect("equal")
-
 ax.scatter(x, y, c=scores, cmap="viridis", marker=".", s=20)
-
-# Define the circle
 circle = patches.Circle((0.0, 0.0), radius=jnp.sqrt(5.0), fc="none", ec="black", lw=4)
-
-# Add the circle to the plot
 ax.add_patch(circle)
 ax.text(2.0, 2.3, "z = 5.0", ha="center", va="center", fontsize=label_fontsize)
-
-# Set the limits of the plot
 ax.set_xlim(-3, 3)
 ax.set_ylim(-3, 3)
 ax.set_xlabel("x", fontsize=label_fontsize)
@@ -154,14 +124,10 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
-
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
+fig.savefig("./fig/fig_2_hvi_expressive_variational_elbo_samples.pdf", format="pdf")
 
-fig.savefig("img/hvi_expressive_variational_elbo_samples.pdf", format="pdf")
-
-# Show the plot
-plt.show()
-
+# ### Training with HVI & IWAE.
 
 marginal_q = vi.marginal(
     genjax.select("x", "y"), expressive_variational_family, lambda: vi.sir(5)
@@ -175,7 +141,7 @@ key = jax.random.PRNGKey(314159)
 ϕ = (0.0, 0.0)
 jitted = jax.jit(jax.vmap(hvi_objective.value_and_grad_estimate, in_axes=(0, None)))
 losses = []
-for i in range(0, 20000):
+for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
     loss, (_, ((ϕ_grads, _), ())) = jitted(sub_keys, ((), ((ϕ, data), ())))
@@ -184,11 +150,6 @@ for i in range(0, 20000):
         print(jnp.mean(loss))
     losses.append(jnp.mean(loss))
 print(ϕ)
-
-key, sub_key = jax.random.split(key)
-sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, ((ϕ_grads, _), ())) = jitted(sub_keys, ((), ((ϕ, data), ())))
-print(jnp.mean(loss))
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 100000)
@@ -200,22 +161,12 @@ scores, v_chm = jax.jit(jax.vmap(marginal_q.random_weighted, in_axes=(0, None, N
 chm = v_chm.get_leaf_value()
 x, y = chm["x"], chm["y"]
 scores = jnp.exp(scores)
-
 fig, ax = plt.subplots(figsize=(12, 12))
-
-# Set aspect ratio to equal to ensure the circle isn't elliptical
 ax.set_aspect("equal")
-
 ax.scatter(x, y, c=scores, cmap="viridis", marker=".", s=20)
-
-# Define the circle
 circle = patches.Circle((0.0, 0.0), radius=jnp.sqrt(5.0), fc="none", ec="black", lw=4)
-
-# Add the circle to the plot
 ax.add_patch(circle)
 ax.text(2.0, 2.3, "z = 5.0", ha="center", va="center", fontsize=label_fontsize)
-
-# Set the limits of the plot
 ax.set_xlim(-3, 3)
 ax.set_ylim(-3, 3)
 ax.set_xlabel("x", fontsize=label_fontsize)
@@ -224,13 +175,9 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
-
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
 
-fig.savefig("img/iwhvi_trained_expressive_variational_elbo_samples.pdf", format="pdf")
-
-# Show the plot
-plt.show()
+fig.savefig("./fig/fig_2_iwhvi_trained_expressive_variational_elbo_samples.pdf", format="pdf")
 
 
 marginal_q = vi.marginal(
@@ -245,7 +192,7 @@ key = jax.random.PRNGKey(314159)
 ϕ = (0.0, 0.0)
 jitted = jax.jit(jax.vmap(hvi_objective.value_and_grad_estimate, in_axes=(0, None)))
 losses = []
-for i in range(0, 20000):
+for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
     loss, (_, ((ϕ_grads, _), ())) = jitted(sub_keys, ((), ((ϕ, data), ())))
@@ -256,36 +203,19 @@ for i in range(0, 20000):
 print(ϕ)
 
 key, sub_key = jax.random.split(key)
-sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, ((ϕ_grads, _), ())) = jitted(sub_keys, ((), ((ϕ, data), ())))
-print(jnp.mean(loss))
-
-
-key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 100000)
 data = genjax.choice_map({"z": 5.0})
 tgt = genjax.gensp.target(model, (), data)
 approx = vi.sir(5, marginal_q, ((ϕ, data), ()))
 scores, v_chm = jax.jit(jax.vmap(approx.simulate, in_axes=(0, None)))(sub_keys, tgt)
-
 chm = v_chm.get_leaf_value()
 x, y = chm["x"], chm["y"]
-
 fig, ax = plt.subplots(figsize=(12, 12))
-
-# Set aspect ratio to equal to ensure the circle isn't elliptical
 ax.set_aspect("equal")
-
 ax.scatter(x, y, marker=".", s=20)
-
-# Define the circle
 circle = patches.Circle((0.0, 0.0), radius=jnp.sqrt(5.0), fc="none", ec="black", lw=4)
-
-# Add the circle to the plot
 ax.add_patch(circle)
 ax.text(2.0, 2.3, "z = 5.0", ha="center", va="center", fontsize=label_fontsize)
-
-# Set the limits of the plot
 ax.set_xlim(-3, 3)
 ax.set_ylim(-3, 3)
 ax.set_xlabel("x", fontsize=label_fontsize)
@@ -294,12 +224,8 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
-
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
 
 fig.savefig(
-    "./fig/diwhvi_trained_expressive_variational_elbo_samples.pdf", format="pdf"
+    "./fig/fig_2_diwhvi_trained_expressive_variational_elbo_samples.pdf", format="pdf"
 )
-
-# Show the plot
-plt.show()

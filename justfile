@@ -4,12 +4,14 @@ gpu:
   pip install jax[cuda11_local]==0.4.24 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 # make fig_2_noisy_cone
+# These are components for the overview figure for the paper.
 fig_2:
   mkdir -p figs
   poetry run python experiments/fig_2_noisy_cone/genjax_cone.py
   poetry run python experiments/fig_2_noisy_cone/genjax_cone_marginal.py
 
 # make fig_7_air_estimator_evaluation
+# These are components for the AIR comparison between our system and Pyro.
 fig_7:
   mkdir -p figs
   mkdir -p training_runs
@@ -18,9 +20,19 @@ fig_7:
   poetry run python experiments/fig_7_air_estimator_evaluation/genjax_reinforce_air.py
 
 # generate the numbers for table_1_minibatch_gradient_benchmark
+# Not a plot, just timings printed out.
 table_1:
   poetry run python experiments/table_1_minibatch_gradient_benchmark/genjax_vae_overhead.py
 
 # generate the numbers for table_2_benchmark_timings
+# Not a plot, just timings printed out using `pytest-benchmark`.
 table_2:
   poetry run pytest experiments/table_2_benchmark_timings
+
+# generate the numbers for table_4_objective_values
+# Not a plot, just timings printed out.
+table_4:
+  poetry run python experiments/table_4_objective_values/genjax_cone.py
+  poetry run python experiments/table_4_objective_values/genjax_cone_marginal.py
+  poetry run python experiments/table_4_objective_values/numpyro_cone.py
+  poetry run python experiments/table_4_objective_values/pyro_cone.py

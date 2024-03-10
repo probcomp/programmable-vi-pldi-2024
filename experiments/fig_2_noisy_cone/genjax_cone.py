@@ -14,6 +14,7 @@ from matplotlib import rcParams
 from matplotlib.gridspec import GridSpec
 
 import genjax
+from genjax import gensp
 from genjax import vi
 
 console = genjax.pretty()
@@ -34,7 +35,7 @@ def model():
 
 
 key, sub_key = jax.random.split(key)
-sub_keys = jax.random.split(sub_key, 20000)
+sub_keys = jax.random.split(sub_key, 5000)
 tr = jax.jit(jax.vmap(model.simulate, in_axes=(0, None)))(sub_keys, ())
 chm = tr.strip()
 
@@ -47,21 +48,14 @@ y = y[ch]
 z = z[ch]
 scores = scores[ch]
 
-# Create a new figure
 fig = plt.figure(figsize=(16, 16))  # Adjust the size for better visualization
 gs = GridSpec(1, 2)
-
-# Define the x and y range
 xp = np.linspace(-4, 4, 2)
 yp = np.linspace(-4, 4, 2)
 xp, yp = np.meshgrid(xp, yp)
 zp = np.full_like(xp, 5)
-
-# First subplot - Original 3D plot
 ax1 = fig.add_subplot(gs[0, 0], projection="3d")  # This spans both columns
-# ax1.plot_surface(xp, yp, zp, alpha=0.3, zorder=1)
 ax1.scatter(x, y, z, c=scores, cmap="viridis")
-# ax1.text(2.0, -3.4, 5, "z = 5.0", color="black", zorder=3, fontsize=label_fontsize / 1.7)
 ax1.set_zlim(0, 25)
 ax1.set_ylim(-4, 4)
 ax1.set_xlim(-4, 4)
@@ -79,14 +73,10 @@ ax1.text(
 ax1.set_xticks([])
 ax1.set_yticks([])
 ax1.set_zticks([])
-
-# Define the x and y range
 xp = np.linspace(-6, 6, 2)
 yp = np.linspace(-6, 6, 2)
 xp, yp = np.meshgrid(xp, yp)
 zp = np.full_like(xp, 5)
-
-# Second subplot - Rotated 3D plot looking at the XZ plane
 ax2 = fig.add_subplot(gs[0, 1], projection="3d")
 ax2.set_zlim(0, 25)
 ax2.set_ylim(-4, 4)
@@ -102,16 +92,8 @@ ax2.set_xticks([])
 ax2.set_yticks([])
 ax2.set_zticks([])
 ax2.view_init(elev=0, azim=-90)
-
-
-# Show the plots
-# plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
-
-# Save the figure as an pdf file (optional)
 plt.tight_layout()
-fig.savefig("./fig/model_prior.pdf", format="pdf")
-
-plt.show()
+fig.savefig("./fig/fig_2_model_prior.pdf", format="pdf")
 
 
 # ## Naive variational guide
@@ -134,24 +116,15 @@ key = jax.random.PRNGKey(314159)
 ϕ = (0.0, 0.0, 1.0, 1.0)
 jitted = jax.jit(jax.vmap(objective.value_and_grad_estimate, in_axes=(0, None)))
 losses = []
-for i in range(0, 20000):
+for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
+    loss, (_, (ϕ_grads, )) = jitted(sub_keys, ((), (ϕ,)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     losses.append(jnp.mean(loss))
     if i % 1000 == 0:
         print(jnp.mean(loss))
 print(ϕ)
-
-
-# ### Mean loss after convergence
-
-
-key, sub_key = jax.random.split(key)
-sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
-jnp.mean(loss)
 
 
 # ### Sampling from the trained variational family
@@ -164,27 +137,14 @@ tr = jax.jit(jax.vmap(variational_family.simulate, in_axes=(0, None)))(
     sub_keys, (data, ϕ)
 )
 chm = tr.strip()
-
-
 x, y = chm["x"], chm["y"]
 scores = jnp.exp(tr.get_score())
-
 fig, ax = plt.subplots(figsize=(12, 12))
-
-# Set aspect ratio to equal to ensure the circle isn't elliptical
 ax.set_aspect("equal")
-
 ax.scatter(x, y, c=scores, cmap="viridis", marker=".", s=20)
-
-# Define the circle
 circle = patches.Circle((0.0, 0.0), radius=jnp.sqrt(5.0), fc="none", ec="black", lw=4)
-
-# Add the circle to the plot
 ax.add_patch(circle)
-
 ax.text(2.0, 2.3, "z = 5.0", ha="center", va="center", fontsize=label_fontsize)
-
-# Set the limits of the plot
 ax.set_xlim(-3, 3)
 ax.set_ylim(-3, 3)
 ax.set_xlabel("x", fontsize=label_fontsize)
@@ -193,13 +153,8 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
-
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
-
-fig.savefig("img/naive_variational_elbo_samples.pdf", format="pdf")
-
-# Show the plot
-plt.show()
+fig.savefig("./fig/fig_2_naive_variational_elbo_samples.pdf", format="pdf")
 
 
 # Training.
@@ -207,24 +162,15 @@ key = jax.random.PRNGKey(2)
 ϕ = (3.0, 0.0, 1.0, 1.0)
 jitted = jax.jit(jax.vmap(objective.value_and_grad_estimate, in_axes=(0, None)))
 losses = []
-for i in range(0, 20000):
+for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
+    loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
     losses.append(jnp.mean(loss))
 print(ϕ)
-
-
-# ### Mean loss after convergence
-
-
-key, sub_key = jax.random.split(key)
-sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
-jnp.mean(loss)
 
 
 key, sub_key = jax.random.split(key)
@@ -238,23 +184,12 @@ chm = tr.strip()
 
 x, y = chm["x"], chm["y"]
 scores = jnp.exp(tr.get_score())
-
 fig, ax = plt.subplots(figsize=(12, 12))
-
-# Set aspect ratio to equal to ensure the circle isn't elliptical
 ax.set_aspect("equal")
-
 ax.scatter(x, y, marker=".", s=20)
-
-# Define the circle
 circle = patches.Circle((0.0, 0.0), radius=jnp.sqrt(5.0), fc="none", ec="black", lw=4)
-
-# Add the circle to the plot
 ax.add_patch(circle)
-
 ax.text(2.0, 2.3, "z = 5.0", ha="center", va="center", fontsize=label_fontsize)
-
-# Set the limits of the plot
 ax.set_xlim(-3, 3)
 ax.set_ylim(-3, 3)
 ax.set_xlabel("x", fontsize=label_fontsize)
@@ -263,14 +198,9 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
-
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
 
-fig.savefig("img/naive_variational_elbo_samples_2.pdf", format="pdf")
-
-# Show the plot
-plt.show()
-
+fig.savefig("./fig/fig_2_naive_variational_elbo_samples_2.pdf", format="pdf")
 
 # ## Training with IWAE
 
@@ -290,22 +220,16 @@ key = jax.random.PRNGKey(314159)
 ϕ = (3.0, 0.0, 1.0, 1.0)
 jitted = jax.jit(jax.vmap(iwae_objective.value_and_grad_estimate, in_axes=(0, None)))
 losses = []
-for i in range(0, 20000):
+for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 1)
-    loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
+    loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
     losses.append(jnp.mean(loss))
 
 print(ϕ)
-
-
-key, sub_key = jax.random.split(key)
-sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
-jnp.mean(loss)
 
 
 key, sub_key = jax.random.split(key)
@@ -319,23 +243,12 @@ chm = tr.strip()
 
 x, y = chm["x"], chm["y"]
 scores = jnp.exp(tr.get_score())
-
 fig, ax = plt.subplots(figsize=(12, 12))
-
-# Set aspect ratio to equal to ensure the circle isn't elliptical
 ax.set_aspect("equal")
-
 ax.scatter(x, y, c=scores, cmap="viridis", marker=".", s=20)
-
-# Define the circle
 circle = patches.Circle((0.0, 0.0), radius=jnp.sqrt(5.0), fc="none", ec="black", lw=4)
-
-# Add the circle to the plot
 ax.add_patch(circle)
-
 ax.text(-2.0, 2.3, "z = 5.0", ha="center", va="center", fontsize=label_fontsize)
-
-# Set the limits of the plot
 ax.set_xlim(-3, 3)
 ax.set_ylim(-3, 3)
 ax.set_xlabel("x", fontsize=label_fontsize)
@@ -344,14 +257,9 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
-
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
 
-fig.savefig("img/naive_variational_iwae_elbo_5_samples.pdf", format="pdf")
-
-
-# Show the plot
-plt.show()
+fig.savefig("./fig/fig_2_naive_variational_iwae_elbo_5_samples.pdf", format="pdf")
 
 
 # ## 20 particle IWAE
@@ -367,21 +275,15 @@ key = jax.random.PRNGKey(314159)
 ϕ = (3.0, 0.0, 1.0, 1.0)
 jitted = jax.jit(jax.vmap(iwae_objective.value_and_grad_estimate, in_axes=(0, None)))
 losses = []
-for i in range(0, 20000):
+for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
+    loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
     losses.append(jnp.mean(loss))
 print(ϕ)
-
-
-key, sub_key = jax.random.split(key)
-sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
-jnp.mean(loss)
 
 
 key, sub_key = jax.random.split(key)
@@ -395,23 +297,12 @@ chm = tr.strip()
 
 x, y = chm["x"], chm["y"]
 scores = jnp.exp(tr.get_score())
-
 fig, ax = plt.subplots(figsize=(12, 12))
-
-# Set aspect ratio to equal to ensure the circle isn't elliptical
 ax.set_aspect("equal")
-
 ax.scatter(x, y, c=scores, cmap="viridis", marker=".", s=20)
-
-# Define the circle
 circle = patches.Circle((0.0, 0.0), radius=jnp.sqrt(5.0), fc="none", ec="black", lw=4)
-
-# Add the circle to the plot
 ax.add_patch(circle)
-
 ax.text(-2.0, 2.3, "z = 5.0", ha="center", va="center", fontsize=label_fontsize)
-
-# Set the limits of the plot
 ax.set_xlim(-3, 3)
 ax.set_ylim(-3, 3)
 ax.set_xlabel("x", fontsize=label_fontsize)
@@ -420,17 +311,13 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
-
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
-
-fig.savefig("img/naive_variational_iwae_elbo_20_samples.pdf", format="pdf")
-
-# Show the plot
-plt.show()
+fig.savefig("./fig/fig_2_naive_variational_iwae_elbo_20_samples.pdf", format="pdf")
 
 
 # ## 50 particle IWAE
-
+# NOTE: slow to run, because vmap + ADEV is not
+# yet fully supported.
 
 iwae_objective = vi.iwae_elbo(
     model, variational_family, genjax.choice_map({"z": 5.0}), 50
@@ -442,21 +329,15 @@ key = jax.random.PRNGKey(314159)
 ϕ = (3.0, 0.0, 1.0, 1.0)
 jitted = jax.jit(jax.vmap(iwae_objective.value_and_grad_estimate, in_axes=(0, None)))
 losses = []
-for i in range(0, 20000):
+for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
+    loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
     losses.append(jnp.mean(loss))
 print(ϕ)
-
-
-key, sub_key = jax.random.split(key)
-sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, (_, ϕ_grads)) = jitted(sub_keys, ((), (data, ϕ)))
-jnp.mean(loss)
 
 
 key, sub_key = jax.random.split(key)
@@ -466,27 +347,14 @@ tr = jax.jit(jax.vmap(variational_family.simulate, in_axes=(0, None)))(
     sub_keys, (data, ϕ)
 )
 chm = tr.strip()
-
-
 x, y = chm["x"], chm["y"]
 scores = jnp.exp(tr.get_score())
-
 fig, ax = plt.subplots(figsize=(12, 12))
-
-# Set aspect ratio to equal to ensure the circle isn't elliptical
 ax.set_aspect("equal")
-
 ax.scatter(x, y, c=scores, cmap="viridis", marker=".", s=20)
-
-# Define the circle
 circle = patches.Circle((0.0, 0.0), radius=jnp.sqrt(5.0), fc="none", ec="black", lw=4)
-
-# Add the circle to the plot
 ax.add_patch(circle)
-
 ax.text(-2.0, 2.3, "z = 5.0", ha="center", va="center", fontsize=label_fontsize)
-
-# Set the limits of the plot
 ax.set_xlim(-3, 3)
 ax.set_ylim(-3, 3)
 ax.set_xlabel("x", fontsize=label_fontsize)
@@ -495,16 +363,11 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
-
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
-
-fig.savefig("img/naive_variational_iwae_elbo_50_samples.pdf", format="pdf")
-
-# Show the plot
-plt.show()
+fig.savefig("./fig/fig_2_naive_variational_iwae_elbo_50_samples.pdf", format="pdf")
 
 
-from genjax import gensp
+# ### Plotting inference results using SIR.
 
 
 @genjax.gen
@@ -536,23 +399,12 @@ chm = v_chm.get_leaf_value()
 
 x, y = chm["x"], chm["y"]
 scores = jnp.exp(tr.get_score())
-
 fig, ax = plt.subplots(figsize=(12, 12))
-
-# Set aspect ratio to equal to ensure the circle isn't elliptical
 ax.set_aspect("equal")
-
 ax.scatter(x, y, marker=".", s=20)
-
-# Define the circle
 circle = patches.Circle((0.0, 0.0), radius=jnp.sqrt(5.0), fc="none", ec="black", lw=4)
-
-# Add the circle to the plot
 ax.add_patch(circle)
-
 ax.text(-2.0, 2.3, "z = 5.0", ha="center", va="center", fontsize=label_fontsize)
-
-# Set the limits of the plot
 ax.set_xlim(-3, 3)
 ax.set_ylim(-3, 3)
 ax.set_xlabel("x", fontsize=label_fontsize)
@@ -561,10 +413,5 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
-
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
-
-fig.savefig("./fig/naive_variational_iwae_elbo_50_sir_samples.pdf", format="pdf")
-
-# Show the plot
-plt.show()
+fig.savefig("./fig/fig_2_naive_variational_iwae_elbo_50_sir_samples.pdf", format="pdf")
