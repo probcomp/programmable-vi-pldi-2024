@@ -13,12 +13,20 @@ fig_2:
 # make fig_7_air_estimator_evaluation
 # These are components for the AIR comparison between our system and Pyro.
 # NOTE: this will take a long time to run fully.
+# Some of the experiments are omitted (for brevity):
+# specifically, RWS in Pyro takes significantly longer than the other estimator
+# experiments and is omitted.
 fig_7:
   mkdir -p figs
   mkdir -p training_runs
   poetry run python experiments/fig_7_air_estimator_evaluation/genjax_enum_air.py
   poetry run python experiments/fig_7_air_estimator_evaluation/genjax_mvd_air.py
   poetry run python experiments/fig_7_air_estimator_evaluation/genjax_reinforce_air.py
+  poetry run python experiments/fig_7_air_estimator_evaluation/genjax_hybrid_air.py
+  poetry run python experiments/fig_7_air_estimator_evaluation/genjax_rws_air.py
+  poetry run python experiments/fig_7_air_estimator_evaluation/pyro_reinforce_air.py
+  poetry run python experiments/fig_7_air_estimator_evaluation/pyro_baselines_air.py
+  poetry run python experiments/fig_7_air_estimator_evaluation/air_analysis.py
 
 # generate the numbers for table_1_minibatch_gradient_benchmark
 # Not a plot, just timings printed out.
@@ -28,7 +36,7 @@ table_1:
 # generate the numbers for table_2_benchmark_timings
 # Not a plot, just timings printed out using `pytest-benchmark`.
 table_2:
-  poetry run pytest experiments/table_2_benchmark_timings
+  poetry run pytest experiments/table_2_benchmark_timings --benchmark-disable-gc
 
 # generate the numbers for table_4_objective_values
 # Not a plot, just timings printed out.

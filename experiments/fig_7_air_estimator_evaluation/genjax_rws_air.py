@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
 
 import os
 import time
@@ -37,9 +35,6 @@ smoke_test = "CI" in os.environ
 assert pyro.__version__.startswith("1.8.6")
 
 
-# In[2]:
-
-
 inpath = "./data/air/.data"
 X_np, Y = multi_mnist.load(inpath)
 X_np = X_np.astype(np.float32)
@@ -63,8 +58,6 @@ show_images(mnist[9:14])
 # ## Defining the variational ingredients
 
 # ### Utilities / learnable pieces
-
-# In[3]:
 
 
 # Utilities for defining the model and the guide.
@@ -147,9 +140,6 @@ class Predict(Pytree):
 
 key, sub_key = jax.random.split(key)
 predict = Predict.new(key)
-
-
-# In[4]:
 
 
 #######
@@ -371,8 +361,6 @@ def image_to_object(z_where, image):
 
 # ### Model
 
-# In[5]:
-
 
 #########
 # Model #
@@ -424,16 +412,12 @@ def model(decoder: Decoder):
 
 # #### Samples from the model
 
-# In[6]:
-
 
 tr = jax.jit(model.simulate)(key, (decoder,))
 tr.strip()
 
 
 # ### Guide
-
-# In[7]:
 
 
 #########
@@ -491,8 +475,6 @@ def guide(
 
 # #### Samples from the guide
 
-# In[8]:
-
 
 data_chm = genjax.choice_map({"obs": jnp.ones((50, 50))})
 tr = jax.jit(guide.simulate)(key, (data_chm, rnn, encoder, predict))
@@ -505,8 +487,6 @@ tr.strip()
 
 # #### Define ELBO objective
 
-# In[9]:
-
 
 data = genjax.choice_map({"obs": jnp.ones((50, 50))})
 objective = vi.elbo(model, guide, data)
@@ -515,8 +495,6 @@ objective
 
 # #### Go go grads
 
-# In[10]:
-
 
 jitted = jax.jit(objective.value_and_grad_estimate)
 loss, ((decoder_grads,), (_, rnn_grads, encoder_grads, predict_grads)) = jitted(
@@ -524,15 +502,10 @@ loss, ((decoder_grads,), (_, rnn_grads, encoder_grads, predict_grads)) = jitted(
 )
 
 
-# In[11]:
-
-
 loss
 
 
 # ### Dataloader
-
-# In[12]:
 
 
 def data_loader(
@@ -555,9 +528,6 @@ def data_loader(
         return jax.lax.index_take(data, (ret_idx,), axes=(0,))
 
     return init, get_batch
-
-
-# In[13]:
 
 
 ##################
@@ -625,9 +595,6 @@ def latents_to_tensor(z):
             for z_where, z_pres in zip(*z)
         ]
     ).transpose(1, 0, 2)
-
-
-# In[14]:
 
 
 ##################
@@ -711,17 +678,11 @@ def draw_many(imgs, zs, title):
     plt.show()
 
 
-# In[15]:
-
-
 params = (decoder, rnn, encoder, predict)
 evaluate_accuracy = count_accuracy(mnist, true_counts, guide, batch_size=1000)
 
 visualize_examples = mnist[5:10]
 visualize = visualize_model(model, guide)
-
-
-# In[16]:
 
 
 def train(key, n=1, num_epochs=200, batch_size=64, learning_rate=1.0e-3):
@@ -841,16 +802,10 @@ def train(key, n=1, num_epochs=200, batch_size=64, learning_rate=1.0e-3):
     return (p_losses, q_losses), accuracy, wall_clock_times, params
 
 
-# In[17]:
-
-
 key, sub_key = jax.random.split(key)
 (p_losses, q_losses), accuracy, wall_clock_times, params = train(
     sub_key, learning_rate=1.0e-4, n=10, batch_size=1, num_epochs=20
 )
-
-
-# In[18]:
 
 
 arr = np.array([p_losses, q_losses, accuracy, wall_clock_times])
@@ -858,12 +813,9 @@ df = pd.DataFrame(
     arr.T, columns=["P Loss", "Q Loss", "Accuracy", "Epoch wall clock times"]
 )
 df.to_csv(
-    "./training_runs/vi_air_rws_10_mvd_batch_size_1_epochs_21_mccoy_prior.csv",
+    "./training_runs/vi_air_rws_10_mvd_batch_size_1_epochs_21.csv",
     index=False,
 )
-
-
-# In[20]:
 
 
 key, sub_key = jax.random.split(key)
@@ -872,13 +824,8 @@ key, sub_key = jax.random.split(key)
 )
 
 
-# In[21]:
-
-
 arr = np.array([p_losses, q_losses, accuracy, wall_clock_times])
 df = pd.DataFrame(
     arr.T, columns=["P Loss", "Q Loss", "Accuracy", "Epoch wall clock times"]
 )
-df.to_csv(
-    "./training_runs/genjax_air_rws_10_mvd_epochs_201_mccoy_prior.csv", index=False
-)
+df.to_csv("./training_runs/genjax_air_rws_10_mvd_epochs_201.csv", index=False)

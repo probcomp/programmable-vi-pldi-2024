@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
 
 import time
 
@@ -17,8 +15,6 @@ from pyro.infer import (
 )
 from pyro.optim import Adam
 from pyro_air import AIR, count_accuracy, get_per_param_lr
-
-# In[2]:
 
 
 #####################
@@ -60,9 +56,6 @@ air_model_args = dict(
 )
 
 
-# In[3]:
-
-
 #####################
 # Initial Setup
 #####################
@@ -79,9 +72,6 @@ visualize_examples = X[5:10]
 # Using float to allow comparison with values sampled from
 # Bernoulli.
 true_counts = torch.tensor([len(objs) for objs in Y], dtype=torch.float)
-
-
-# In[4]:
 
 
 ac_losses, ac_accuracy, ac_wall_clock_times = None, None, None
@@ -137,6 +127,6 @@ for train_idx in range(0, 5):
         arr.T, columns=["ELBO loss", "Accuracy", "Epoch wall clock times"]
     )
     df.to_csv(
-        f"./training_runs/pyro_air_epochs_{num_epoches}_mccoy_prior_{train_idx}.csv",
+        f"./training_runs/pyro_air_epochs_{num_epoches}_{train_idx}.csv",
         index=False,
     )

@@ -38,9 +38,6 @@ pyro_reinforce_air = pd.read_csv(
 pyro_reinforce_baselines_air = pd.read_csv(
     "./training_runs/pyro_air_reinforce_baselines_epochs_41_0.csv",
 )
-pyro_rws_air = pd.read_csv(
-    "./training_runs/pyro_air_rws_epochs_6_0.csv",
-)
 
 plt.rcParams["text.usetex"] = False
 fig = plt.figure(figsize=(10, 12), dpi=240)
@@ -364,17 +361,6 @@ rws_air_l = go_plot_rws(
 )
 pyro_cmap = plt.cm.get_cmap("Reds", 8)  # Replace 'viridis' with your chosen colormap
 
-pyro_rws_l = go_plot_rws(
-    ax3,
-    pyro_rws_air,
-    "Epoch wall clock times",
-    "Accuracy",
-    "Pyro (batch size = 1, RWS(K = 10))",
-    pyro_cmap,
-    2,
-    "X",
-)
-
 ax3.set_xlabel("Time (s)", fontsize=label_fontsize / 3)
 ax3.set_ylabel("Accuracy", fontsize=label_fontsize / 3)
 
@@ -390,4 +376,4 @@ ax4.set_frame_on(False)
 ax4.get_xaxis().set_visible(False)
 ax4.get_yaxis().set_visible(False)
 fig.tight_layout()
-fig.savefig("./fig/fig_2_air_full.pdf", format="pdf")
+fig.savefig("./figs/fig_2_air_full.pdf", format="pdf")

@@ -37,7 +37,7 @@ air_model_args = dict(
     decoder_output_bias=-2,
     decoder_output_use_sigmoid=True,
     use_masking=True,
-    use_baselines=True,
+    use_baselines=False,
     baseline_scalar=None,
     scale_prior_mean=3.0,
     scale_prior_sd=0.2,
@@ -84,7 +84,7 @@ def train_air(svi: SVI, air: AIR, multi_mnist_data: Tuple[torch.Tensor, torch.Te
 
 
 @pytest.mark.parametrize("elbo", [TraceGraph_ELBO(), RenyiELBO(alpha=0)], ids=type)
-def test_benchmark(
+def test_benchmark_pyro_reinforce(
     benchmark, elbo: ELBO, multi_mnist_data: Tuple[torch.Tensor, torch.Tensor]
 ):
     air = AIR(**air_model_args)

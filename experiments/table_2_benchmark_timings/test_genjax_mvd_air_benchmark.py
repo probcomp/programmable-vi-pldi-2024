@@ -19,6 +19,12 @@ from genjax.typing import Any, FloatArray, Int, IntArray, Tuple, typecheck
 key = jax.random.PRNGKey(314159)
 console = genjax.pretty()
 sns.set_theme(style="white")
+# font_path = (
+#     "/home/femtomc/.local/share/fonts/Unknown Vendor/TrueType/Lato/Lato_Bold.ttf"
+# )
+# font_manager.fontManager.addfont(font_path)
+# custom_font_name = font_manager.FontProperties(fname=font_path).get_name()
+# rcParams["font.family"] = custom_font_name
 
 console = genjax.pretty()
 key = jax.random.PRNGKey(314159)
@@ -347,7 +353,7 @@ def step(
     prev_x: FloatArray,
     prev_z_pres: IntArray,
 ):
-    z_pres = vi.flip_enum(z_pres_prior * prev_z_pres[0]) @ f"z_pres_{t}"
+    z_pres = vi.flip_mvd(z_pres_prior * prev_z_pres[0]) @ f"z_pres_{t}"
     z_pres = jnp.array([z_pres.astype(int)])
     z_where = (
         vi.mv_normal_diag_reparam(z_where_prior_loc, z_where_prior_scale)
@@ -393,7 +399,7 @@ def guide_step(
     rnn_input = jnp.concatenate([data, prev_z_where, prev_z_what, prev_z_pres])
     h, c = rnn(rnn_input, (prev_h, prev_c))
     z_pres_p, z_where_loc, z_where_scale = predict(h)
-    z_pres = vi.flip_enum(z_pres_p[0] * prev_z_pres[0]) @ f"z_pres_{t}"
+    z_pres = vi.flip_mvd(z_pres_p[0] * prev_z_pres[0]) @ f"z_pres_{t}"
     z_pres = jnp.array([z_pres.astype(int)])
     z_where = vi.mv_normal_diag_reparam(z_where_loc, z_where_scale) @ f"z_where_{t}"
     x_att = image_to_object(z_where, data)
@@ -508,7 +514,7 @@ def epoch_train(opt_state, params, key, train_idx):
     return params, opt_state, losses
 
 
-def test_benchmark(benchmark):
+def test_benchmark_genjax_mvd(benchmark):
     key = jax.random.PRNGKey(314159)
     params = (decoder, rnn, encoder, predict)
     opt_state = adam.init(params)

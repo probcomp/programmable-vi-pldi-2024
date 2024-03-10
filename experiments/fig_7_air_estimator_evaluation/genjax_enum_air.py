@@ -473,8 +473,8 @@ objective = vi.elbo(model, guide, data)
 
 
 jitted = jax.jit(objective.value_and_grad_estimate)
-loss, ((decoder_grads,), (rnn_grads, encoder_grads, predict_grads)) = jitted(
-    key, ((decoder,), (rnn, encoder, predict))
+loss, ((decoder_grads,), (_, rnn_grads, encoder_grads, predict_grads)) = jitted(
+    key, ((decoder,), (data, rnn, encoder, predict))
 )
 
 
@@ -658,7 +658,7 @@ visualize_examples = mnist[5:10]
 visualize = visualize_model(model, guide)
 
 
-def train(key, n=1, num_epochs=200, batch_size=64, learning_rate=1.0e-3):
+def train(key, n=1, num_epochs=20, batch_size=64, learning_rate=1.0e-3):
     def svi_update(model, guide, optimiser):
         def batch_updater(key, params, opt_state, data_batch):
             def grads(key, params, data):
@@ -669,10 +669,10 @@ def train(key, n=1, num_epochs=200, batch_size=64, learning_rate=1.0e-3):
                     loss,
                     (
                         (decoder_grads,),
-                        (rnn_grads, encoder_grads, predict_grads),
+                        (_, rnn_grads, encoder_grads, predict_grads),
                     ),
                 ) = objective.value_and_grad_estimate(
-                    key, ((decoder,), (rnn, encoder, predict))
+                    key, ((decoder,), (data, rnn, encoder, predict))
                 )
                 return loss, (decoder_grads, rnn_grads, encoder_grads, predict_grads)
 
@@ -752,7 +752,7 @@ losses, accuracy, wall_clock_times = None, None, None
 for train_idx in range(0, 5):
     key, sub_key = jax.random.split(key)
     r_loss, r_acc, r_times, params = train(
-        sub_key, learning_rate=1.0e-4, n=1, batch_size=64, num_epochs=40
+        sub_key, learning_rate=1.0e-4, n=1, batch_size=64, num_epochs=20
     )
     # Save run.
     arr = np.array([r_loss, r_acc, r_times])
@@ -760,7 +760,7 @@ for train_idx in range(0, 5):
         arr.T, columns=["ELBO loss", "Accuracy", "Epoch wall clock times"]
     )
     df.to_csv(
-        f"./training_runs/genjax_air_enum_epochs_41_mccoy_prior_{train_idx}.csv",
+        f"./training_runs/genjax_air_enum_epochs_21_{train_idx}.csv",
         index=False,
     )
     if losses is None:
@@ -788,4 +788,4 @@ df = pd.DataFrame(
         "Std epoch wall clock times",
     ],
 )
-df.to_csv("./training_runs/vi_air_enum_epochs_41_mccoy_prior.csv", index=False)
+df.to_csv("./training_runs/vi_air_enum_epochs_21.csv", index=False)
