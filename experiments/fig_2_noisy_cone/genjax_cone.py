@@ -119,7 +119,7 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, (ϕ_grads, )) = jitted(sub_keys, ((), (ϕ,)))
+    loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     losses.append(jnp.mean(loss))
     if i % 1000 == 0:

@@ -49,7 +49,7 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ, ), ())))
+    loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ,), ())))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
@@ -60,7 +60,8 @@ print(ϕ)
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
 loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ,), ())))
-print((jnp.mean(loss), jnp.std(loss)))
+print("HVI-ELBO(N = 1):")
+print((jnp.mean(loss), jnp.var(loss)))
 
 
 # ### HVI with SIR
@@ -81,14 +82,15 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, ((ϕ_grads, ), ())) = jitted(sub_keys, ((), ((ϕ, ), ())))
+    loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ,), ())))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     losses.append(jnp.mean(loss))
 
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
-loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ, ), ())))
-print((jnp.mean(loss), jnp.std(loss)))
+loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ,), ())))
+print("HVIWAE(N = 5, K = 1):")
+print((jnp.mean(loss), jnp.var(loss)))
 
 
 marginal_q = vi.marginal(
@@ -113,4 +115,5 @@ for i in range(0, 5000):
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
 loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ,), ())))
-print((jnp.mean(loss), jnp.std(loss)))
+print("HVIWAE(N = 5, K = 5):")
+print((jnp.mean(loss), jnp.var(loss)))

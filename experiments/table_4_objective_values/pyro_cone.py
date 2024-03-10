@@ -82,13 +82,13 @@ conditioned_model = pyro.condition(model, data={"z": data})
 svi = pyro.infer.SVI(conditioned_model, guide, adam, elbo)
 
 losses = []
-for step in range(20000 if not smoke_test else 2):  # Consider running for more steps.
+for step in range(6000 if not smoke_test else 2):  # Consider running for more steps.
     loss = svi.step()
     losses.append(loss)
     if step % 1000 == 0:
         logging.info("Elbo loss: {}".format(loss))
 
-print((torch.tensor(losses)[1000:].mean(), torch.tensor(losses)[1000:].std()))
+print((torch.tensor(losses)[5000:].mean(), torch.tensor(losses)[5000:].std()))
 
 
 # ## Training (IWAE)
@@ -104,11 +104,11 @@ conditioned_model = pyro.condition(model, data={"z": data})
 svi = pyro.infer.SVI(conditioned_model, guide, adam, elbo)
 
 losses = []
-for step in range(20000 if not smoke_test else 2):  # Consider running for more steps.
+for step in range(6000 if not smoke_test else 2):  # Consider running for more steps.
     loss = svi.step()
     losses.append(loss)
     if step % 1000 == 0:
         logging.info("Elbo loss: {}".format(loss))
 
 
-print((torch.tensor(losses)[1000:].mean(), torch.tensor(losses)[1000:].std()))
+print((torch.tensor(losses)[5000:].mean(), torch.tensor(losses)[5000:].std()))

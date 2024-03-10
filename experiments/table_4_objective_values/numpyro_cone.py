@@ -47,10 +47,10 @@ def guide(data):
 
 svi = SVI(model, guide, sgd(1e-3), loss=TraceGraph_ELBO(num_particles=64))
 key, sub_key = jax.random.split(key)
-svi_result = svi.run(sub_key, 20000, 5.0)
+svi_result = svi.run(sub_key, 6000, 5.0)
 
 print("NumPyro TraceGraph ELBO:")
-print((svi_result.losses[1000:].mean(), svi_result.losses[1000:].std()))
+print((svi_result.losses[5000:].mean(), svi_result.losses[5000:].std()))
 
 
 # ## Training (IWAE)
@@ -58,7 +58,7 @@ print((svi_result.losses[1000:].mean(), svi_result.losses[1000:].std()))
 
 svi = SVI(model, guide, sgd(1e-3), loss=RenyiELBO(num_particles=5))
 key, sub_key = jax.random.split(key)
-svi_result = svi.run(sub_key, 20000, 5.0)
+svi_result = svi.run(sub_key, 6000, 5.0)
 
 print("NumPyro RenyiELBO(k = 5):")
-print((svi_result.losses[1000:].mean(), svi_result.losses[1000:].std()))
+print((svi_result.losses[5000:].mean(), svi_result.losses[5000:].std()))

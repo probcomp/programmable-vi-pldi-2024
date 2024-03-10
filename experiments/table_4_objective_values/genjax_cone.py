@@ -67,7 +67,8 @@ for i in range(0, 20000):
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
 loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
-print((jnp.mean(loss), jnp.std(loss)))
+print("ELBO:")
+print((jnp.mean(loss), jnp.var(loss)))
 
 # ## Training with IWAE
 
@@ -98,7 +99,7 @@ key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
 loss, (_, (_,)) = jitted(sub_keys, ((), (ϕ,)))
 print("IWAE(K = 5):")
-print((jnp.mean(loss), jnp.std(loss)))
+print((jnp.mean(loss), jnp.var(loss)))
 
 
 # ## 20 particle IWAE
@@ -126,7 +127,7 @@ key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
 loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
 print("IWAE(K = 20):")
-print((jnp.mean(loss), jnp.std(loss)))
+print((jnp.mean(loss), jnp.var(loss)))
 
 
 # ## 50 particle IWAE
@@ -153,4 +154,4 @@ key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
 loss, (_, (ϕ_grads,)) = jitted(sub_keys, ((), (ϕ,)))
 print("IWAE(K = 50):")
-print((jnp.mean(loss), jnp.std(loss)))
+print((jnp.mean(loss), jnp.var(loss)))

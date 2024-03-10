@@ -55,7 +55,7 @@ losses = []
 for i in range(0, 5000):
     key, sub_key = jax.random.split(key)
     sub_keys = jax.random.split(sub_key, 64)
-    loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ, ), ())))
+    loss, (_, ((ϕ_grads,), ())) = jitted(sub_keys, ((), ((ϕ,), ())))
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
     if i % 1000 == 0:
         print(jnp.mean(loss))
@@ -94,7 +94,9 @@ ax.set_yticks([])
 ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
-fig.savefig("./fig/fig_2_untrained_expressive_variational_elbo_samples.pdf", format="pdf")
+fig.savefig(
+    "./fig/fig_2_untrained_expressive_variational_elbo_samples.pdf", format="pdf"
+)
 
 # ## Sampling from trained variational family
 
@@ -177,7 +179,9 @@ ax.yaxis.labelpad = 18  # adjust the value as needed
 ax.yaxis.label.set_rotation(0)  # 90 degrees for vertical
 plt.tight_layout()  # Adjusts subplot params so that subplots fit into the figure area
 
-fig.savefig("./fig/fig_2_iwhvi_trained_expressive_variational_elbo_samples.pdf", format="pdf")
+fig.savefig(
+    "./fig/fig_2_iwhvi_trained_expressive_variational_elbo_samples.pdf", format="pdf"
+)
 
 
 marginal_q = vi.marginal(
