@@ -1,33 +1,86 @@
 # Probabilistic programming with programmable variational inference
 
-
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10806202.svg)](https://doi.org/10.5281/zenodo.10806202)
 
 This repository contains the JAX implementation that accompanies the paper [_Probabilistic programming with programmable variational inference_](./pldi24_programmable_vi_original_submit.pdf), as well as the experiments used to generate figures and numbers in the empirical evaluation section.
 
 ## Overview
 
-![architecture](architecture.png)
+The artifact accompanying our paper is a Python library for probabilistic programming with variational inference.
 
-The architecture of our implementation is shown above. It consists of two main components:
+Using our library, users can write *probabilistic programs* encoding probabilistic models and variational families. They can then define *variational objectives* to optimize, such as the ELBO. Our system can automate the estimation of gradients of these objectives, enabling gradient-based training.
 
-* `adevjax`: a JAX-based prototype of [ADEV](https://dl.acm.org/doi/abs/10.1145/3571198), which also supports a reverse move variant.
-* `genjax`: a JAX-based implementation of [the Gen probabilistic programming language](https://dl.acm.org/doi/10.1145/3314221.3314642)
+### Example
 
-The `genjax.vi` module combines these two components to automate the derivation of unbiased gradient estimators for variational inference objective functions.
+For example, here is the model from Figure 2 of our paper, encoding a probability distribution on triples (x, y, z) located near a cone:
 
-**Note on available documentation**
+```python
+import genjax
+from genjax import gensp, vi
 
-Both `adevjax` and `genjax` are _private_ repositories: we've bundled specific versions of them for this artifact. However, there are public documentation pages for both:
+@genjax.gen
+def model():
+    x = vi.normal_reparam(0.0, 10.0) @ "x"
+    y = vi.normal_reparam(0.0, 10.0) @ "y"
+    rs = x**2 + y**2
+    z = vi.normal_reparam(rs, 0.1 + (rs / 100.0)) @ "z"
+```
+
+Our goal will be to infer values of $x$ and $y$ consistent with an observation that $z = 5$:
+```python
+data = genjax.choice_map({"z": 5.0})
+```
+
+To do so, we define a *variational family* -- a parametric family of distributions over the latent variables (x, y).
+```python
+@genjax.gen
+def variational_family(_, ϕ):
+    μ1, μ2, log_σ1, log_σ2 = ϕ
+    x = vi.normal_reparam(μ1, jnp.exp(log_σ1)) @ "x"
+    y = vi.normal_reparam(μ2, jnp.exp(log_σ2)) @ "y"
+```
+
+We want to find parameters that minimize the [ELBO](https://en.wikipedia.org/wiki/Evidence_lower_bound), a loss function that encourages the variational family to be close to the Bayesian posterior over the latent variables:
+
+```python
+objective = vi.elbo(model, variational_family, data)
+```
+
+For convenience, the ELBO is defined as a library function, but users can also define their own objectives.
+
+Our library can automatically estimate gradients of the ELBO and other probabilistic loss functions, and these gradients can be used to optimize the variational family's parameters.
+
+```python
+import jax
+import jax.tree_util as jtu
+
+# Training.
+key = jax.random.PRNGKey(314159)
+ϕ = (0.0, 0.0, 1.0, 1.0)
+L = jax.jit(jax.vmap(objective.value_and_grad_estimate, in_axes=(0, None)))
+for i in range(5000):
+    key, sub_key = jax.random.split(key)
+    sub_keys = jax.random.split(sub_key, 64)
+    (loss, (_, (_, ϕ_grads))) = L(sub_keys, ((), (data, ϕ)))
+    ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
+```
+
+The full code to run this example and plot results can be found in the `examples/fig_2_noisy_cone` directory.
+
+### Documentation
+
+To ensure reproducibility, we have packaged a frozen version of our `genjax` library in this repository. Documentation is publicly available for the relevant modules, but please note that some APIs have changed since we submitted our paper, and the documentation may be out-of-sync with the code in this repository:
 * [`adevjax`](https://probcomp.github.io/genjax/library/adev.html)
 * [`genjax`](https://probcomp.github.io/genjax/library/index.html)
 * [`genjax.vi`](https://probcomp.github.io/genjax/library/inference/vi.html)
 
-By virtue of the fact that the libraries are closed source (and under rapid development), the documentation pages may contain changes to the functionality of the code which is not accounted for in this artifact. We recommend referring to usage in the experiments and [the extensions notebook](./extending_our_work.ipynb) for the most accurate information.
+For guidance on usage of the exact library version included in this artifact, please instead see our included tutorial notebook on [using and extending GenJAX.vi](./extending_our_work.ipynb).
 
-## Reproducing our results
+## Reproducing the paper's claims
 
-We've organized the experiments code under the `experiments` directory. The `experiments` directory contains the following subdirectories (which map onto the figures and tables in the submitted version of the paper):
+We have provided code to reproduce all of the experiments in the paper, namely the results in Figure 2, Figure 7, Table 1, Table 2, and Table 4. At a high level, these experiments validate our claims that (1) our implementation introduces minimal overhead compared to hand-coded gradient estimators, (2) our implementation of variational inference is faster than Pyro's, and on par with NumPyro's, for algorithms that all systems can express, and (3) our system supports gradient estimators that Pyro and Numpyro do not automate, some of which empirically converge faster than the algorithms they do support.
+
+We've organized the experiments code under the `experiments` directory. The `experiments` directory contains the following subdirectories, which map onto the figures and tables in the submitted version of the paper:
 
 * `fig_2_noisy_cone`
 * `fig_7_air_estimator_evaluation`
@@ -35,13 +88,13 @@ We've organized the experiments code under the `experiments` directory. The `exp
 * `table_2_benchmark_timings`
 * `table_4_objective_values`
 
-Each directory contains code used to create graphical components in the submission.
+Each directory contains code used to run the experiment, and also to reproduce the graphs or table results that appear in the submission.
 
-**Notes on runtime to support experiments**
+**Computational cost of the experiments:** Some of the experiments can be run on CPU in a reasonable amount of time, whereas others require GPU. (See further discussion below.) For reference:
 
-(**CPU okay**) For `fig_2_noisy_cone` and `table_4_objective_values`, a local CPU device is sufficient to run the experiments. These experiments illustrate usage of our system to automate gradient estimators for [hierarchical variational inference](https://arxiv.org/abs/1511.02386) (HVI), and nested importance weighted HVI.
+* (**CPU likely okay**) For `fig_2_noisy_cone` and `table_4_objective_values`, a CPU should be sufficient to run the experiments. These experiments illustrate usage of our system to automate gradient estimators for [hierarchical variational inference](https://arxiv.org/abs/1511.02386) (HVI), and nested importance weighted HVI.
 
-(**GPU likely required**) For `fig_7_air_estimator_evaluation`, `table_1_minibatch_gradient_benchmark`, and `table_2_benchmark_timings`, we recommend running on a GPU device. These experiments illustrate various performance comparisons between our system, handcoded gradient estimators, and [Pyro](https://pyro.ai/) for several variational objectives and estimators.
+* (**GPU likely required**) For `fig_7_air_estimator_evaluation`, `table_1_minibatch_gradient_benchmark`, and `table_2_benchmark_timings`, we recommend running on a GPU. These experiments illustrate various performance comparisons between our system, handcoded gradient estimators, and [Pyro](https://pyro.ai/) for several variational objectives and estimators.
 
 ### Setting up your environment
 
@@ -125,15 +178,9 @@ just table_1
 
 ## Notes on artifact evaluation
 
-> Some of the results are performance data, and therefore exact numbers depend on the particular hardware. In this case, artifacts should explain how to recognize when experiments on other hardware reproduce the high-level results (e.g., that a certain optimization exhibits a particular trend, or that comparing two tools one outperforms the other in a certain class of cases).
+For our submission to PLDI, our hardware was a Linux box with a Nvidia RTX 4090, and an AMD Ryzen 7 7800x3D CPU. We also ran our experiments on a Linux box with an Nvidia Tesla V100 SMX2 16 GB, and an Intel Xeon (8) @ 2.2 GHz. In both experiment environments, we observed the same general trends, including the same order-of-magnitude speed-ups of our JAX-based gradient estimators compared to Pyro's.
 
-For our submission to PLDI, our hardware was a Linux box with a Nvidia RTX 4090, and an AMD Ryzen 7 7800x3D CPU. We also ran our experiments on a Linux box with an Nvidia Tesla V100 SMX2 16 GB, and an Intel Xeon (8) @ 2.2 GHz. The high-level claims of our paper (that we provide a sound denotational account of variational inference, and that our system provides automation to support exploration of new gradient estimation strategies for variational inference) are hardware independent.
-
-In both experiment environments, we observed the same order of magnitude speed up on epoch training sweeps for our JAX implementation of gradient estimators over Pyro.
-
-> In some cases repeating the evaluation may take a long time. Reviewers may not reproduce full results in such cases.
-
-In this artifact, we've omitted experiments involving Pyro's reweighted-wake (RWS) sleep implementation, as we found that the runtime was prohibitively long (training for the same number of epochs as the rest of our benchmarks would have lasted a day, or longer).
+Note that even on GPU, Pyro's implementation of the reweighted wake-sleep (RWS) algorithm may be prohibitively slow.
 
 
 ## Extending our work
