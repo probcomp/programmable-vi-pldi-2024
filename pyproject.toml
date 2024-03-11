@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 adevjax = {path = "adevjax"}
 genjax = {path = "genjax", develop = true}
-python = ">=3.9,<3.13"
+python = "3.10.13"
 jax = "0.4.21"
 jaxlib="0.4.21"
 numpy = "1.26.4"
