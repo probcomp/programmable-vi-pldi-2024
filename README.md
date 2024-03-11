@@ -62,6 +62,18 @@ just run_all
 
 The experiments will be run in order, and the figure results will be saved to the `./fig` directory at the top level as PDF files.
 
+You can also run each experiment individually, the set of recipes available via `just` are:
+```
+❯ just -l
+Available recipes:
+    fig_2   # These are components for the overview figure for the paper.
+    fig_7   # These are components for the AIR figure for the paper.
+    gpu     # get GPU jax
+    table_1 # Not a plot, just timings printed out.
+    table_2 # Not a plot, just timings printed out using `pytest-benchmark`.
+    table_4 # Not a plot, just timings printed out.
+```
+
 **Using `poetry` to run experiments directly**
 
 ## Notes on artifact evaluation
