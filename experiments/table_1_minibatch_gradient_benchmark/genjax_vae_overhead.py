@@ -95,7 +95,7 @@ def batch_elbo_grad_estimate(key, encoder, decoder, data_batch):
     def _inner(key, encoder, decoder, data):
         chm = choice_map({"image": data.flatten()})
         objective = vi.elbo(model, guide, chm)
-        return objective.grad_estimate(key, ((decoder,), (encoder,)))
+        return objective.grad_estimate(key, ((decoder,), (chm, encoder,)))
 
     sub_keys = jax.random.split(key, len(data_batch))
     return jax.vmap(_inner, in_axes=(0, None, None, 0))(
@@ -114,7 +114,7 @@ for batch_size in batch_sizes:
     data_batch = train_fetch(0)[0]
     durations = []
     jit1(key, encoder, decoder, data_batch)
-    for i in range(0, 100):
+    for i in range(0, 300):
         t0 = time.perf_counter()
         jit1(key, encoder, decoder, data_batch)
         duration = time.perf_counter() - t0
@@ -169,7 +169,7 @@ for batch_size in batch_sizes:
     data_batch = train_fetch(0)[0]
     durations = []
     jit2(key, encoder, decoder, data_batch)
-    for i in range(0, 100):
+    for i in range(0, 300):
         t0 = time.perf_counter()
         jit2(key, encoder, decoder, data_batch)
         duration = time.perf_counter() - t0
