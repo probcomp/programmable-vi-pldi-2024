@@ -669,9 +669,6 @@ def draw_many(imgs, zs, title):
 params = (decoder, rnn, encoder, predict)
 evaluate_accuracy = count_accuracy(mnist, true_counts, guide, batch_size=1000)
 
-visualize_examples = mnist[5:10]
-visualize = visualize_model(model, guide)
-
 
 def train(key, n=1, num_epochs=40, batch_size=64, learning_rate=1.0e-3):
     def svi_update(model, guide, optimiser):
@@ -785,7 +782,6 @@ def train(key, n=1, num_epochs=40, batch_size=64, learning_rate=1.0e-3):
             f"Epoch={i}, total_epoch_step_time={acc_time:.2f}, p_loss={jnp.mean(p_loss):.2f}, q_loss={jnp.mean(q_loss)}"
         )
         print("accuracy={}, counts={}".format(acc, counts))
-        visualize(sub_key, params, visualize_examples)
 
     return (p_losses, q_losses), accuracy, wall_clock_times, params
 
