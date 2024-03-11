@@ -74,6 +74,12 @@ Available recipes:
     table_4 # Not a plot, just timings printed out.
 ```
 
+meaning that one can run any of these experiments using `just`, for example:
+
+```
+just table_1
+```
+
 **Using `poetry` to run experiments directly**
 
 ## Notes on artifact evaluation
