@@ -65,7 +65,7 @@ where `<YOUR_IMAGE_ID>` is the hash of the image you built.
 
 With this method, you can ignore the setup below and jump to  [Running the experiments](https://github.com/probcomp/programmable-vi-pldi-2024/tree/main?tab=readme-ov-file#running-the-experiments).
 
-#### `poetry` and `just`
+#### Setup using `poetry` and `just`
 
 We utilize [`poetry`](https://python-poetry.org/docs/#installation) to manage Python dependencies, and utilize [`just`](https://github.com/casey/just) as a command runner. At a bare minimum, you'll need to install `poetry`, but we also recommend installing `just` to utilize some of our convenience commands (to run experiments, and get compatible versions of `torch` and `jaxlib`).
 
