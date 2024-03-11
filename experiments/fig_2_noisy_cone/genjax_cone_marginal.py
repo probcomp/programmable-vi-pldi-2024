@@ -202,7 +202,7 @@ key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 100000)
 tgt = genjax.gensp.target(model, (), data)
 approx = vi.sir(5, marginal_q, ((data, ϕ), ()))
-scores, v_chm = jax.jit(jax.vmap(approx.simulate, in_axes=(0, None)))(sub_keys, tgt)
+v_chm = jax.jit(jax.vmap(approx.simulate, in_axes=(0, None)))(sub_keys, tgt)
 chm = v_chm.get_leaf_value()
 x, y = chm["x"], chm["y"]
 fig, ax = plt.subplots(figsize=(12, 12))
