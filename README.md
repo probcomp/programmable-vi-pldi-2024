@@ -74,7 +74,7 @@ To ensure reproducibility, we have packaged a frozen version of our `genjax` lib
 * [`genjax`](https://probcomp.github.io/genjax/library/index.html)
 * [`genjax.vi`](https://probcomp.github.io/genjax/library/inference/vi.html)
 
-For guidance on usage of the exact library version included in this artifact, please instead see our included tutorial notebook on [using and extending GenJAX.vi](./extending_our_work.ipynb).
+For guidance on usage of the exact library version included in this artifact, please instead see our included tutorial notebook on [using and extending `genjax.vi`](./extending_our_work.ipynb).
 
 ## Reproducing the paper's claims
 
