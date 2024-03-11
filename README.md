@@ -1,4 +1,8 @@
 # Probabilistic programming with programmable variational inference
+
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10806202.svg)](https://doi.org/10.5281/zenodo.10806202)
+
 This repository contains the JAX implementation that accompanies the paper [_Probabilistic programming with programmable variational inference_](./pldi24_programmable_vi_original_submit.pdf), as well as the experiments used to generate figures and numbers in the empirical evaluation section.
 
 ## Overview
