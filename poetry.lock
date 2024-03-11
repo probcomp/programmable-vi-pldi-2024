@@ -2225,13 +2225,13 @@ test = ["dm-haiku (>=0.0.3)", "dm-tree (>=0.1.7)", "flax (==0.5.3)"]
 
 [[package]]
 name = "orbax-checkpoint"
-version = "0.5.4"
+version = "0.5.5"
 description = "Orbax Checkpoint"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "orbax_checkpoint-0.5.4-py3-none-any.whl", hash = "sha256:db7fb4bf5f7e5229de855106bbdbb0660b5a2260a118703222ace6e18badc6da"},
-    {file = "orbax_checkpoint-0.5.4.tar.gz", hash = "sha256:421ae160be02018597f314fff32fb3966a641d5d2b88d7f096d6eefe6a86dc62"},
+    {file = "orbax_checkpoint-0.5.5-py3-none-any.whl", hash = "sha256:e01d51e60f94e3393a08e8c07292c811b93ac58672dde80fc23844c16f2eddb7"},
+    {file = "orbax_checkpoint-0.5.5.tar.gz", hash = "sha256:cebcb96f22f11736a1f9ee76c78c888baae8537268c7ff6663ad9cba3076c655"},
 ]
 
 [package.dependencies]

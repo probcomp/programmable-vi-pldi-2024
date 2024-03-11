@@ -16,6 +16,7 @@ fig_2:
 
 # make fig_7_air_estimator_evaluation
 # These are components for the AIR comparison between our system and Pyro.
+# Note: we omitted Pyro RWS in this script (because it's slow).
 fig_7:
   mkdir -p figs
   mkdir -p training_runs
@@ -26,7 +27,6 @@ fig_7:
   poetry run python experiments/fig_7_air_estimator_evaluation/genjax_rws_air.py
   poetry run python experiments/fig_7_air_estimator_evaluation/pyro_reinforce_air.py
   poetry run python experiments/fig_7_air_estimator_evaluation/pyro_baselines_air.py
-  poetry run python experiments/fig_7_air_estimator_evaluation/pyro_rws_air.py
   poetry run python experiments/fig_7_air_estimator_evaluation/air_analysis.py
 
 # generate the numbers for table_1_minibatch_gradient_benchmark
