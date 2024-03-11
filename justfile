@@ -26,6 +26,7 @@ fig_7:
   poetry run python experiments/fig_7_air_estimator_evaluation/genjax_rws_air.py
   poetry run python experiments/fig_7_air_estimator_evaluation/pyro_reinforce_air.py
   poetry run python experiments/fig_7_air_estimator_evaluation/pyro_baselines_air.py
+  poetry run python experiments/fig_7_air_estimator_evaluation/pyro_rws_air.py
   poetry run python experiments/fig_7_air_estimator_evaluation/air_analysis.py
 
 # generate the numbers for table_1_minibatch_gradient_benchmark
