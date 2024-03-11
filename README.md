@@ -22,7 +22,7 @@ We've organized the experiments code under the `experiments` directory. The `exp
 * `table_2_benchmark_timings`
 * `table_4_objective_values`
 
-Each directory contains the code used to create an artifact in the submission.
+Each directory contains the code used to create graphical components in the submission.
 
 ### Setting up your environment
 
@@ -49,6 +49,9 @@ This will fetch versions of `torch` and `jaxlib` _which are compatible with each
 
 > [!IMPORTANT] 
 > Several of the experiments are computationally intensive, and may take a long time to run. We recommend running them on a machine with a GPU, and using `jax` and `torch` backend that supports GPU computation. In particular, `fig_7_air_estimator_evaluation` (`just fig_7`), `table_2_benchmark_timings` (`just table_2`), and `table_1_minibatch_gradient_benchmark` (`just table_1`) will take quite a long time on a CPU.
+
+**Note on deviations**
+> Some of the results are performance data, and therefore exact numbers depend on the particular hardware. In this case, artifacts should explain how to recognize when experiments on other hardware reproduce the high-level results (e.g., that a certain optimization exhibits a particular trend, or that comparing two tools one outperforms the other in a certain class of cases).
 
 
 To run _all of the experiments_, it suffices to run (**this will take a long time**):
