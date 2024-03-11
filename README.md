@@ -70,7 +70,7 @@ The experiments will be run in order, and the figure results will be saved to th
 
 For our submission to PLDI, our hardware was a Linux box with a Nvidia RTX 4090, and an AMD Ryzen 9 5950X. We also ran our experiments on a Linux box with an Nvidia Tesla V100 SMX2 16 GB, and an Intel Xeon (8) @ 2.2 GHz. The high-level claims of our paper (that we provide a sound denotational account of variational inference, and that our system enables rapid iteration over new gradient estimation strategies for variational inference) are hardware independent.
 
-In both experiment environments, we observed the same order of magnitude speed ups for our JAX implementation of gradient estimators over Pyro.
+In both experiment environments, we observed the same order of magnitude speed up on epoch training sweeps for our JAX implementation of gradient estimators over Pyro.
 
 > In some cases repeating the evaluation may take a long time. Reviewers may not reproduce full results in such cases.
 
