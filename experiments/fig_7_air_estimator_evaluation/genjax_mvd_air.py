@@ -759,7 +759,6 @@ def train(key, n=1, num_epochs=40, batch_size=64, learning_rate=1.0e-3):
     return losses, accuracy, wall_clock_times, params
 
 
-# Run with different random seeds.
 key, sub_key = jax.random.split(key)
 r_loss, r_acc, r_times, params = train(
     sub_key, learning_rate=1.0e-4, n=1, batch_size=64, num_epochs=40
@@ -773,7 +772,6 @@ df.to_csv(
 )
 
 
-# Run with different random seeds.
 key, sub_key = jax.random.split(key)
 r_loss, r_acc, r_times, params = train(
     sub_key, learning_rate=1.0e-4, n=2, batch_size=64, num_epochs=40

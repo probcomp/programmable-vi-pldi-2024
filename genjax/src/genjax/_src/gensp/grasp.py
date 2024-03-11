@@ -535,7 +535,7 @@ def q_wake(
         key = adevjax.reap_key()
         posterior_sample = posterior_approx.simulate(key, tgt)
         key = adevjax.reap_key()
-        w = q.estimate_logpdf(key, posterior_sample, *q_args)
+        w = q.estimate_logpdf(key, posterior_sample.get_leaf_value(), *q_args)
         return -w
 
     return adevjax.E(q_wake_loss)
@@ -570,7 +570,7 @@ def p_wake(
         posterior_sample = posterior_approx.simulate(key, tgt)
         key = adevjax.reap_key()
         merged = data.safe_merge(posterior_sample.get_leaf_value())
-        w = p.estimate_logpdf(key, ValueChoiceMap(merged), *p_args)
+        w = p.estimate_logpdf(key, merged, *p_args)
         return -w
 
     return adevjax.E(p_wake_loss)

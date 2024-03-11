@@ -28,12 +28,12 @@ hybrid_mvd_air = pd.read_csv(
 hybrid_iwae_mvd_air = pd.read_csv(
     "./training_runs/genjax_air_iwae_2_hybrid_mvd_enum_epochs_41.csv",
 )
-rws_air_mvd = pd.read_csv("./training_runs/genjax_air_rws_10_mvd_epochs_21.csv")
+rws_air_mvd = pd.read_csv("./training_runs/genjax_air_rws_10_mvd_epochs_41.csv")
 pyro_reinforce_air = pd.read_csv(
-    "./training_runs/pyro_air_reinforce_epochs_41_0.csv",
+    "./training_runs/pyro_air_reinforce_epochs_41.csv",
 )
 pyro_reinforce_baselines_air = pd.read_csv(
-    "./training_runs/pyro_air_reinforce_baselines_epochs_41_0.csv",
+    "./training_runs/pyro_air_reinforce_baselines_epochs_41.csv",
 )
 
 plt.rcParams["text.usetex"] = False
