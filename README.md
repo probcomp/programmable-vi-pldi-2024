@@ -27,12 +27,12 @@ def model():
 ```
 
 Our goal will be to infer values of $x$ and $y$ consistent with an observation that $z = 5$:
-```
+```python
 data = genjax.choice_map({"z": 5.0})
 ```
 
 To do so, we define a *variational family* -- a parametric family of distributions over the latent variables (x, y).
-```
+```python
 @genjax.gen
 def variational_family(_, ϕ):
     μ1, μ2, log_σ1, log_σ2 = ϕ
@@ -42,7 +42,7 @@ def variational_family(_, ϕ):
 
 We want to find parameters that minimize the [ELBO](https://en.wikipedia.org/wiki/Evidence_lower_bound), a loss function that encourages the variational family to be close to the Bayesian posterior over the latent variables:
 
-```
+```python
 objective = vi.elbo(model, variational_family, data)
 ```
 
@@ -51,6 +51,9 @@ For convenience, the ELBO is defined as a library function, but users can also d
 Our library can automatically estimate gradients of the ELBO and other probabilistic loss functions, and these gradients can be used to optimize the variational family's parameters.
 
 ```python
+import jax
+import jax.tree_util as jtu
+
 # Training.
 key = jax.random.PRNGKey(314159)
 ϕ = (0.0, 0.0, 1.0, 1.0)
