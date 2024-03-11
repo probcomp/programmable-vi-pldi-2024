@@ -35,6 +35,12 @@ We've organized the experiments code under the `experiments` directory. The `exp
 
 Each directory contains code used to create graphical components in the submission.
 
+**Notes on runtime to support experiments**
+
+(**CPU okay**) For `fig_2_noisy_cone` and `table_4_objective_values`, a local CPU device is sufficient to run the experiments. These experiments illustrate usage of our system to automate gradient estimators for [hierarchical variational inference](https://arxiv.org/abs/1511.02386) (HVI), and nested importance weighted HVI.
+
+(**GPU likely required**) For `fig_7_air_estimator_evaluation`, `table_1_minibatch_gradient_benchmark`, and `table_2_benchmark_timings`, we recommend running on a GPU device. These experiments illustrate various performance comparisons between our system, handcoded gradient estimators, and [Pyro](https://pyro.ai/) for several variational objectives and estimators.
+
 ### Setting up your environment
 
 We utilize [`poetry`](https://python-poetry.org/docs/#installation) to manage Python dependencies, and utilize [`just`](https://github.com/casey/just) as a command runner. At a bare minimum, you'll need to install `poetry`, but we also recommend installing `just` to utilize some of our convenience commands (to run experiments, and get compatible versions of `torch` and `jaxlib`).
@@ -46,7 +52,7 @@ poetry install
 ```
 to instantiate a virtual environment and install the Python dependencies.
 
-### GPU acceleration
+#### GPU acceleration
 
 Several of our experiments are computationally intensive, and we recommend GPU acceleration.
 
@@ -61,7 +67,9 @@ The versions we've selected we've guaranteed for compatibility, so we recommend 
 ### Running the experiments
 
 > [!IMPORTANT] 
-> Several of the experiments are computationally intensive, and may take a long time to run. We recommend running them on a machine with a GPU, and using `jax` and `torch` backend that supports GPU computation. In particular, `fig_7_air_estimator_evaluation` (`just fig_7`), `table_2_benchmark_timings` (`just table_2`), and `table_1_minibatch_gradient_benchmark` (`just table_1`) will take quite a long time on a CPU.
+> Several of the experiments are computationally intensive, and may take a long time to run. We recommend running them on a machine with a GPU, and using `jax` and `torch` backend that supports GPU computation. 
+> 
+> In particular, `fig_7_air_estimator_evaluation` (`just fig_7`), `table_2_benchmark_timings` (`just table_2`), and `table_1_minibatch_gradient_benchmark` (`just table_1`) will take quite a long time on a CPU.
 
 **Using `just` to run experiments**
 
