@@ -19,9 +19,7 @@ Both `adevjax` and `genjax` are _private_ repositories: we've bundled specific v
 * [`genjax`](https://probcomp.github.io/genjax/library/index.html)
 * [`genjax.vi`](https://probcomp.github.io/genjax/library/inference/vi.html)
 
-By virtue of the fact that the libraries are closed source (and under rapid development), the documentation pages may contain changes to the functionality of the code which is not accounted for in this artifact. 
-
-Refer to usage in the experiments and the tutorial notebook for the most accurate information.
+By virtue of the fact that the libraries are closed source (and under rapid development), the documentation pages may contain changes to the functionality of the code which is not accounted for in this artifact. We recommend referring to usage in the experiments and [the extensions notebook](./notebooks/extending_our_work.ipynb) for the most accurate information.
 
 ## Reproducing our results
 
