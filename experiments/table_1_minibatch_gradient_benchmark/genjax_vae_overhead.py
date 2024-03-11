@@ -95,7 +95,16 @@ def batch_elbo_grad_estimate(key, encoder, decoder, data_batch):
     def _inner(key, encoder, decoder, data):
         chm = choice_map({"image": data.flatten()})
         objective = vi.elbo(model, guide, chm)
-        return objective.grad_estimate(key, ((decoder,), (chm, encoder,)))
+        return objective.grad_estimate(
+            key,
+            (
+                (decoder,),
+                (
+                    chm,
+                    encoder,
+                ),
+            ),
+        )
 
     sub_keys = jax.random.split(key, len(data_batch))
     return jax.vmap(_inner, in_axes=(0, None, None, 0))(
