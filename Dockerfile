@@ -2,6 +2,8 @@ FROM probcomp/caliban:gpu-ubuntu2204-py310-cuda118
 MAINTAINER McCoy "Hoss" Becker <mccoyb@mit.edu>
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    virtualenv \
+    curl \
     pipx \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -15,3 +17,8 @@ WORKDIR /home/wizard
 
 RUN pipx ensurepath
 RUN pipx install poetry
+
+SHELL ["/bin/bash", "-l", "-c"]
+ADD . /home/wizard
+RUN poetry install
+RUN poetry run just gpu

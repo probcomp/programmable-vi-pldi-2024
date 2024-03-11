@@ -4,6 +4,7 @@ version = "0.0.1"
 description = "The evaluation artifact for Probabilistic Programming with Programmable Variational Inference."
 authors = ["McCoy Reynolds Becker <mccoyb@mit.edu>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 adevjax = {path = "adevjax"}
