@@ -28,7 +28,7 @@ num_epoches = 41
 z_pres_prior = 0.01
 learning_rate = 1e-4
 baseline_lr = 1e-1
-elbo = TraceEnum_ELBO()
+elbo = TraceGraph_ELBO()
 # explicitly list out all configurable options
 air_model_args = dict(
     num_steps=3,
@@ -45,7 +45,7 @@ air_model_args = dict(
     decoder_output_bias=-2,
     decoder_output_use_sigmoid=True,
     use_masking=True,
-    use_baselines=False,
+    use_baselines=True,
     baseline_scalar=None,
     scale_prior_mean=3.0,
     scale_prior_sd=0.2,
@@ -112,6 +112,6 @@ wall_clock_times = np.cumsum(time_per_epoch)
 arr = np.array([all_loss, all_accuracy, wall_clock_times])
 df = pd.DataFrame(arr.T, columns=["ELBO loss", "Accuracy", "Epoch wall clock times"])
 df.to_csv(
-    f"./training_runs/pyro_air_epochs_{num_epoches}.csv",
+    f"./training_runs/pyro_air_reinforce_baselines_epochs_{num_epoches}.csv",
     index=False,
 )

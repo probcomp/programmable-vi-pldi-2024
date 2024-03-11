@@ -11,7 +11,7 @@ import pyro.contrib.examples.multi_mnist as multi_mnist
 import torch
 from pyro.infer import (
     SVI,
-    TraceEnum_ELBO,
+    TraceGraph_ELBO,
 )
 from pyro.optim import Adam
 from pyro_air import AIR, count_accuracy, get_per_param_lr
@@ -28,7 +28,7 @@ num_epoches = 41
 z_pres_prior = 0.01
 learning_rate = 1e-4
 baseline_lr = 1e-1
-elbo = TraceEnum_ELBO()
+elbo = TraceGraph_ELBO()
 # explicitly list out all configurable options
 air_model_args = dict(
     num_steps=3,
@@ -112,6 +112,6 @@ wall_clock_times = np.cumsum(time_per_epoch)
 arr = np.array([all_loss, all_accuracy, wall_clock_times])
 df = pd.DataFrame(arr.T, columns=["ELBO loss", "Accuracy", "Epoch wall clock times"])
 df.to_csv(
-    f"./training_runs/pyro_air_epochs_{num_epoches}.csv",
+    f"./training_runs/pyro_air_reinforce_epochs_{num_epoches}.csv",
     index=False,
 )

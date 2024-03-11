@@ -772,7 +772,7 @@ df.to_csv(
 
 key, sub_key = jax.random.split(key)
 r_loss, r_acc, r_times, params = train(
-    sub_key, learning_rate=1.0e-4, n=2, batch_size=1, num_epochs=40
+    sub_key, learning_rate=1.0e-4, n=2, batch_size=64, num_epochs=40
 )
 # Save run.
 arr = np.array([r_loss, r_acc, r_times])

@@ -757,6 +757,6 @@ r_loss, r_acc, r_times, params = train(
 arr = np.array([r_loss, r_acc, r_times])
 df = pd.DataFrame(arr.T, columns=["ELBO loss", "Accuracy", "Epoch wall clock times"])
 df.to_csv(
-    f"./training_runs/genjax_air_enum_epochs_{num_epochs}.csv",
+    f"./training_runs/genjax_air_enum_epochs_{num_epochs + 1}.csv",
     index=False,
 )
