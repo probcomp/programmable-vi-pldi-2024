@@ -172,7 +172,6 @@ jit2 = jax.jit(batch_elbo_grad_estimate)
 hand_runtime_over_batches = []
 hand_std_ds = []
 for batch_size in batch_sizes:
-    print(batch_size)
     train_init, train_fetch = load_dataset(MNIST, batch_size=batch_size, split="train")
     num_train, train_idx = train_init()
     data_batch = train_fetch(0)[0]
