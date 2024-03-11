@@ -346,7 +346,27 @@ rws_air_l = go_plot_rws(
     2,
     "X",
 )
-pyro_cmap = plt.cm.get_cmap("Reds", 8)  # Replace 'viridis' with your chosen colormap
+
+try:
+    pyro_rws_air = pd.read_csv(
+        "./training_runs/pyro_air_rws_epochs_6.csv",
+    )
+    pyro_cmap = plt.cm.get_cmap(
+        "Reds", 8
+    )  # Replace 'viridis' with your chosen colormap
+
+    pyro_rws_l = go_plot_rws(
+        ax3,
+        pyro_rws_air,
+        "Epoch wall clock times",
+        "Accuracy",
+        "Pyro (batch size = 1, RWS(K = 10))",
+        pyro_cmap,
+        2,
+        "X",
+    )
+except:
+    print("Pyro AIR RWS not found.")
 
 ax3.set_xlabel("Time (s)", fontsize=label_fontsize / 3)
 ax3.set_ylabel("Accuracy", fontsize=label_fontsize / 3)

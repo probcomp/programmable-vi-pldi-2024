@@ -22,13 +22,13 @@ from pyro_air import AIR, count_accuracy, get_per_param_lr
 #####################
 seed = 123456
 use_cuda = torch.cuda.is_available()
-batch_size = 64
+batch_size = 1
 num_epoches = 6
 
 z_pres_prior = 0.01
 learning_rate = 1e-4
 baseline_lr = 1e-1
-rws = ReweightedWakeSleep()
+rws = ReweightedWakeSleep(num_particles=10)
 # explicitly list out all configurable options
 air_model_args = dict(
     num_steps=3,

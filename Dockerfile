@@ -21,4 +21,3 @@ RUN pipx install poetry
 SHELL ["/bin/bash", "-l", "-c"]
 ADD . /home/wizard
 RUN poetry install
-RUN poetry run just gpu
