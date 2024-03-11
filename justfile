@@ -1,4 +1,8 @@
-# get GPU jax
+# The default `just` lists all available commands.
+default:
+  @just --list
+
+# Get GPU torch & jax
 gpu:
   pip install --upgrade torch==2.1.0 torchvision==0.16.0+cu118 --index-url https://download.pytorch.org/whl/cu118
   pip install jax[cuda11_pip]==0.4.21 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
@@ -12,10 +16,6 @@ fig_2:
 
 # make fig_7_air_estimator_evaluation
 # These are components for the AIR comparison between our system and Pyro.
-# NOTE: this will take a long time to run fully.
-# Some of the experiments are omitted (for brevity):
-# specifically, RWS in Pyro takes significantly longer than the other estimator
-# experiments and is omitted.
 fig_7:
   mkdir -p figs
   mkdir -p training_runs
@@ -45,3 +45,10 @@ table_4:
   poetry run python experiments/table_4_objective_values/genjax_cone_marginal.py
   poetry run python experiments/table_4_objective_values/numpyro_cone.py
   poetry run python experiments/table_4_objective_values/pyro_cone.py
+  
+run_all:
+  @just fig_2
+  @just table_4
+  @just table_1
+  @just table_2
+  @just fig_7
