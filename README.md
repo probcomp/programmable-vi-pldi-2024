@@ -23,7 +23,7 @@ Both `adevjax` and `genjax` are _private_ repositories: we've bundled specific v
 * [`genjax`](https://probcomp.github.io/genjax/library/index.html)
 * [`genjax.vi`](https://probcomp.github.io/genjax/library/inference/vi.html)
 
-By virtue of the fact that the libraries are closed source (and under rapid development), the documentation pages may contain changes to the functionality of the code which is not accounted for in this artifact. We recommend referring to usage in the experiments and [the extensions notebook](./notebooks/extending_our_work.ipynb) for the most accurate information.
+By virtue of the fact that the libraries are closed source (and under rapid development), the documentation pages may contain changes to the functionality of the code which is not accounted for in this artifact. We recommend referring to usage in the experiments and [the extensions notebook](./extending_our_work.ipynb) for the most accurate information.
 
 ## Reproducing our results
 
@@ -137,7 +137,7 @@ In this artifact, we've omitted experiments involving Pyro's reweighted-wake (RW
 
 
 ## Extending our work
-There are several ways to extend our work. We've provided [a tutorial notebook](./notebooks/extending_our_work.ipynb) which covers a few of these ways:
+There are several ways to extend our work. We've provided [a tutorial notebook](./extending_our_work.ipynb) which covers a few of these ways:
 * (**Extending ADEV, the automatic differentiation algorithm, with new samplers equipped with gradient strategies.**) After implementing the ADEV interfaces for these objects, they can be freely lifted into the `Distribution` type of our language, and can be used in modeling and guide code. We illustrate this process by implementing `beta_implicit`, and using it in a model and guide program from the Pyro tutorials.
 * (**Implementing new loss functions, by utilizing the modeling interfaces in our language.**) We illustrate this process by implementing [SDOS](https://arxiv.org/abs/2103.01030), an estimator for a symmetric KL divergence, using our language and automated the derivation of gradients for a guide program.
 * (**Using a standard loss function (like `genjax.vi.elbo`) with new models and guides.**) By virtue of the programmability of our system, this is a standard means of extending our work. This extension is covered in the tutorial for the first case, above.
