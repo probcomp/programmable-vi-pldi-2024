@@ -45,6 +45,28 @@ Each directory contains code used to create graphical components in the submissi
 
 ### Setting up your environment
 
+There are several possible ways to make an environment which can run the experiments.
+
+#### Setup using `docker`
+
+Possibly the easiest way is to use [`docker`](https://docs.docker.com/). We've provided a `Dockerfile` with the repository, with a public image which we've curated. To setup an environment, run:
+
+```
+docker build .
+```
+
+This will proceed to build a container which you can use:
+
+```
+docker run --runtime nvidia -it <YOUR_IMAGE_ID>
+```
+
+where `<YOUR_IMAGE_ID>` is the hash of the image you built.
+
+With this method, you can ignore the setup below and jump to  [Running the experiments](https://github.com/probcomp/programmable-vi-pldi-2024/tree/main?tab=readme-ov-file#running-the-experiments).
+
+#### `poetry` and `just`
+
 We utilize [`poetry`](https://python-poetry.org/docs/#installation) to manage Python dependencies, and utilize [`just`](https://github.com/casey/just) as a command runner. At a bare minimum, you'll need to install `poetry`, but we also recommend installing `just` to utilize some of our convenience commands (to run experiments, and get compatible versions of `torch` and `jaxlib`).
 
 With `poetry` installed, you can use `poetry shell` to create a virtual environment. Run:
@@ -75,7 +97,7 @@ The versions we've selected we've guaranteed for compatibility, so we recommend 
 
 **Using `just` to run experiments**
 
-To run _all of the experiments_, it suffices to run (**this will take a long time**):
+To run _all of the experiments_, it suffices to run (**this will take a long time and not recommended on CPU**):
 
 ```
 just run_all
