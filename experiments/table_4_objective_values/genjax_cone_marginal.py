@@ -97,7 +97,7 @@ for i in range(0, 5000):
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
 loss, (_, ((_, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
-print("HVIWAE(N = 5, K = 1):")
+print("IWHVI(N = 5, K = 1):")
 print((jnp.mean(loss), jnp.var(loss)))
 
 
@@ -122,5 +122,5 @@ for i in range(0, 5000):
 key, sub_key = jax.random.split(key)
 sub_keys = jax.random.split(sub_key, 5000)
 loss, (_, ((_, ϕ_grads), ())) = jitted(sub_keys, ((), ((data, ϕ), ())))
-print("HVIWAE(N = 5, K = 5):")
+print("IWHVI(N = 5, K = 5) (also called DIWHVI):")
 print((jnp.mean(loss), jnp.var(loss)))
