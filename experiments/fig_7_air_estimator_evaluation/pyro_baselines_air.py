@@ -11,7 +11,7 @@ import pyro.contrib.examples.multi_mnist as multi_mnist
 import torch
 from pyro.infer import (
     SVI,
-    TraceEnum_ELBO,
+    TraceGraph_ELBO,
 )
 from pyro.optim import Adam
 from pyro_air import AIR, count_accuracy, get_per_param_lr
