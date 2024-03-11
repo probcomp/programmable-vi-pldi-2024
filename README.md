@@ -14,7 +14,7 @@ The `genjax.vi` module combines these two components to automate the derivation 
 
 ## Reproducing our results
 
-We've organized the experiments code under the `experiments` directory. The `experiments` directory contains the following subdirectories (which map directly onto the figures and tables in the submitted version of the paper):
+We've organized the experiments code under the `experiments` directory. The `experiments` directory contains the following subdirectories (which map onto the figures and tables in the submitted version of the paper):
 
 * `fig_2_noisy_cone`
 * `fig_7_air_estimator_evaluation`
@@ -22,7 +22,7 @@ We've organized the experiments code under the `experiments` directory. The `exp
 * `table_2_benchmark_timings`
 * `table_4_objective_values`
 
-Each directory contains the code used to create graphical components in the submission.
+Each directory contains code used to create graphical components in the submission.
 
 ### Setting up your environment
 
@@ -39,20 +39,20 @@ to instantiate a virtual environment and install the Python dependencies.
 
 Several of our experiments are computationally intensive, and we recommend GPU acceleration.
 
-For GPU acceleration, we assume access to a CUDA 11 enabled environment, we've setup a convenient command to install `torch` and `jaxlib` with support for CUDA 11:
+For GPU acceleration, we assume access to a CUDA 11 enabled environment. There is a convenience command to install `torch` and `jaxlib` with support for CUDA 11:
 ```
 just gpu
 ```
-This will fetch versions of `torch` and `jaxlib` _which are compatible with each other_ (because we're benchmarking both `torch` and `jax`-enabled code). This is not a trivial thing: the versions we've selected we've guaranteed for compatibility, so we recommend attempting to setup your system so that you can run this command successfully. If you have a CUDA 11 enabled system, and you ran `poetry install` as above, you should be okay.
+This will fetch versions of `torch` and `jaxlib` _which are compatible with each other_ (because we're benchmarking both `torch` and `jax`-enabled code). 
+
+The versions we've selected we've guaranteed for compatibility, so we recommend attempting to setup your system so that you can run this command successfully. If you have a CUDA 11 enabled system, and you ran `poetry install` as above, you should be okay.
 
 ### Running the experiments
 
 > [!IMPORTANT] 
 > Several of the experiments are computationally intensive, and may take a long time to run. We recommend running them on a machine with a GPU, and using `jax` and `torch` backend that supports GPU computation. In particular, `fig_7_air_estimator_evaluation` (`just fig_7`), `table_2_benchmark_timings` (`just table_2`), and `table_1_minibatch_gradient_benchmark` (`just table_1`) will take quite a long time on a CPU.
 
-**Note on deviations**
-> Some of the results are performance data, and therefore exact numbers depend on the particular hardware. In this case, artifacts should explain how to recognize when experiments on other hardware reproduce the high-level results (e.g., that a certain optimization exhibits a particular trend, or that comparing two tools one outperforms the other in a certain class of cases).
-
+**Using `just` to run experiments**
 
 To run _all of the experiments_, it suffices to run (**this will take a long time**):
 
@@ -61,6 +61,39 @@ just run_all
 ```
 
 The experiments will be run in order, and the figure results will be saved to the `./fig` directory at the top level as PDF files.
+
+You can also run each experiment individually, the set of recipes available via `just` are:
+```
+❯ just -l
+Available recipes:
+    fig_2   # These are components for the overview figure for the paper.
+    fig_7   # These are components for the AIR figure for the paper.
+    gpu     # get GPU jax
+    table_1 # Not a plot, just timings printed out.
+    table_2 # Not a plot, just timings printed out using `pytest-benchmark`.
+    table_4 # Not a plot, just timings printed out.
+```
+
+meaning that one can run any of these experiments using `just`, for example:
+
+```
+just table_1
+```
+
+**Using `poetry` to run experiments directly**
+
+## Notes on artifact evaluation
+
+> Some of the results are performance data, and therefore exact numbers depend on the particular hardware. In this case, artifacts should explain how to recognize when experiments on other hardware reproduce the high-level results (e.g., that a certain optimization exhibits a particular trend, or that comparing two tools one outperforms the other in a certain class of cases).
+
+For our submission to PLDI, our hardware was a Linux box with a Nvidia RTX 4090, and an AMD Ryzen 9 5950X. We also ran our experiments on a Linux box with an Nvidia Tesla V100 SMX2 16 GB, and an Intel Xeon (8) @ 2.2 GHz. The high-level claims of our paper (that we provide a sound denotational account of variational inference, and that our system enables rapid iteration over new gradient estimation strategies for variational inference) are hardware independent.
+
+In both experiment environments, we observed the same order of magnitude speed up on epoch training sweeps for our JAX implementation of gradient estimators over Pyro.
+
+> In some cases repeating the evaluation may take a long time. Reviewers may not reproduce full results in such cases.
+
+In this artifact, we've omitted experiments involving Pyro's reweighted-wake (RWS) sleep implementation, as we found that the runtime was prohibitively long (training for the same number of epochs as the rest of our benchmarks would have lasted a day, or longer).
+
 
 ## Extending our work
 There are several ways to extend our work. We've provided [a tutorial notebook](./notebooks/extending_our_work.ipynb) which covers a few of these ways:
