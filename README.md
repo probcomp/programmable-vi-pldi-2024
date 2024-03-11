@@ -12,6 +12,15 @@ The architecture of our implementation is shown above. It consists of two main c
 
 The `genjax.vi` module combines these two components to automate the derivation of unbiased gradient estimators for variational inference objective functions.
 
+**Note on available documentation**
+
+Both `adevjax` and `genjax` are _private_ repositories: we've bundled specific versions of them for this artifact. However, there are public documentation pages for both:
+* [`adevjax`](https://probcomp.github.io/genjax/library/adev.html)
+* [`genjax`](https://probcomp.github.io/genjax/library/index.html)
+* [`genjax.vi`](https://probcomp.github.io/genjax/library/inference/vi.html)
+
+By virtue of the fact that the libraries are closed source (and under rapid development), the documentation pages may contain changes to the functionality of the code which is not accounted for in the artifact. Refer to usage in the experiments and the tutorial notebook for the most accurate information.
+
 ## Reproducing our results
 
 We've organized the experiments code under the `experiments` directory. The `experiments` directory contains the following subdirectories (which map onto the figures and tables in the submitted version of the paper):
