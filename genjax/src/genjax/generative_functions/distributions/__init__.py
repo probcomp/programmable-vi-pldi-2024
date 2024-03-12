@@ -39,6 +39,12 @@ from genjax._src.generative_functions.distributions.tensorflow_probability impor
     tfp_bates,
 )
 from genjax._src.generative_functions.distributions.tensorflow_probability import (
+    tfp_beta,
+)
+from genjax._src.generative_functions.distributions.tensorflow_probability import (
+    tfp_flip,
+)
+from genjax._src.generative_functions.distributions.tensorflow_probability import (
     tfp_bernoulli,
 )
 from genjax._src.generative_functions.distributions.tensorflow_probability import (
@@ -144,6 +150,8 @@ __all__ = [
     "TFPMixture",
     "tfp_mixture",
     "tfp_bates",
+    "tfp_beta",
+    "tfp_flip",
     "tfp_bernoulli",
     "tfp_chi",
     "tfp_chi2",
