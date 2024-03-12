@@ -670,7 +670,7 @@ params = (decoder, rnn, encoder, predict)
 evaluate_accuracy = count_accuracy(mnist, true_counts, guide, batch_size=1000)
 
 
-def train(key, n=1, num_epochs=40, batch_size=64, learning_rate=1.0e-3):
+def train(key, n=2, num_epochs=40, batch_size=64, learning_rate=1.0e-3):
     def svi_update(model, guide, optimiser):
         def batch_updater(key, params, opt_state, data_batch):
             def p_grads(key, params, data):
@@ -788,7 +788,7 @@ def train(key, n=1, num_epochs=40, batch_size=64, learning_rate=1.0e-3):
 
 key, sub_key = jax.random.split(key)
 (p_losses, q_losses), accuracy, wall_clock_times, params = train(
-    sub_key, learning_rate=1.0e-3, n=10, batch_size=64, num_epochs=40
+    sub_key, learning_rate=3.0e-3, n=10, batch_size=64, num_epochs=40
 )
 
 arr = np.array([p_losses, q_losses, accuracy, wall_clock_times])
