@@ -359,7 +359,8 @@ z_where_prior_loc = jnp.array([3.0, 0.0, 0.0])
 z_where_prior_scale = jnp.array([0.2, 1.0, 1.0])
 z_what_prior_loc = jnp.zeros(50, dtype=float)
 z_what_prior_scale = jnp.ones(50, dtype=float)
-z_pres_prior = 0.008
+z_pres_prior = 0.05
+# z_pres_prior = [0.05, 0.05**2.3, 0.05 ** (5)]
 eps = 1e-4
 
 
@@ -371,7 +372,7 @@ def step(
     prev_x: FloatArray,
     prev_z_pres: IntArray,
 ):
-    z_pres = vi.flip_mvd(z_pres_prior ** (2 * t + 1)) @ f"z_pres_{t}"
+    z_pres = vi.flip_mvd(z_pres_prior) @ f"z_pres_{t}"
     z_pres = jnp.array([z_pres.astype(int)])
     z_where = (
         vi.mv_normal_diag_reparam(z_where_prior_loc, z_where_prior_scale)
@@ -428,7 +429,7 @@ def guide_step(
     h, c = rnn(rnn_input, (prev_h, prev_c))
     z_pres_p, z_where_loc, z_where_scale = predict(h)
     z_pres = (
-        vi.flip_mvd((eps + (z_pres_p[0] * prev_z_pres[0])) / (1 + 2 * eps))
+        vi.flip_mvd((eps + (z_pres_p[0] * prev_z_pres[0])) / (1 + 1.01 * eps))
         @ f"z_pres_{t}"
     )
     z_pres = jnp.array([z_pres.astype(int)])
@@ -788,7 +789,7 @@ def train(key, n=2, num_epochs=40, batch_size=64, learning_rate=1.0e-3):
 
 key, sub_key = jax.random.split(key)
 (p_losses, q_losses), accuracy, wall_clock_times, params = train(
-    sub_key, learning_rate=3.0e-3, n=10, batch_size=64, num_epochs=40
+    sub_key, learning_rate=1.0e-3, n=10, batch_size=64, num_epochs=40
 )
 
 arr = np.array([p_losses, q_losses, accuracy, wall_clock_times])

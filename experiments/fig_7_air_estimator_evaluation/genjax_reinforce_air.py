@@ -427,24 +427,15 @@ def guide_step(
     rnn_input = jnp.concatenate([data, prev_z_where, prev_z_what, prev_z_pres])
     h, c = rnn(rnn_input, (prev_h, prev_c))
     z_pres_p, z_where_loc, z_where_scale = predict(h)
-    z_pres_p = z_pres_p[0] * prev_z_pres[0]
-    z_pres_p = jnp.clip(z_pres_p, 0.001, 1.0)
-    z_pres = vi.flip_reinforce(z_pres_p) @ f"z_pres_{t}"
-    (z_where_loc, z_where_scale) = jtu.tree_map(
-        lambda v1, v2: z_pres * v1 + (1 - z_pres) * v2,
-        (z_where_loc, z_where_scale),
-        (z_where_prior_loc, z_where_prior_scale),
+    z_pres = (
+        vi.flip_reinforce((eps + (z_pres_p[0] * prev_z_pres[0])) / (1 + 1.01 * eps))
+        @ f"z_pres_{t}"
     )
+    z_pres = jnp.array([z_pres.astype(int)])
     z_where = vi.mv_normal_diag_reparam(z_where_loc, z_where_scale) @ f"z_where_{t}"
     x_att = image_to_object(z_where, data)
     z_what_loc, z_what_scale = encoder(x_att)
-    (z_what_loc, z_what_scale) = jtu.tree_map(
-        lambda v1, v2: z_pres * v1 + (1 - z_pres) * v2,
-        (z_what_loc, z_what_scale),
-        (z_what_prior_loc, z_what_prior_scale),
-    )
     z_what = vi.mv_normal_diag_reparam(z_what_loc, z_what_scale) @ f"z_what_{t}"
-    z_pres = jnp.array([z_pres.astype(int)])
     return z_where, z_what, z_pres, h, c
 
 
