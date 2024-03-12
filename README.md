@@ -100,14 +100,6 @@ Each directory contains code used to run the experiment, and also to reproduce t
 
 There are several possible ways to make an environment which can run the experiments.
 
-#### (PLDI 2024 REVIEWERS) Are you reviewing our artifact for PLDI 2024?
-
-We've setup a GPU accelerated environment for you which you can access at the static notebook url:
-> http://35.227.178.234:8888/lab?token=d534a1d8cfd08af0db2b3594b787658e3d18ea3c1c46860e
-
-
-**There is only a single server, with a single GPU** If there are multiple reviewers, please coordinate to use the environment, as required. **Also, it should go without saying: please do not share this link with others.**
-
 #### Setup using `docker`
 
 Possibly the easiest way is to use [`docker`](https://docs.docker.com/). We've provided a `Dockerfile` with the repository, with a public image which we've curated. To setup an environment, run:
