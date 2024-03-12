@@ -789,22 +789,22 @@ def train(key, n=2, num_epochs=40, batch_size=64, learning_rate=1.0e-3):
 
 key, sub_key = jax.random.split(key)
 (p_losses, q_losses), accuracy, wall_clock_times, params = train(
-    sub_key, learning_rate=1.0e-3, n=10, batch_size=64, num_epochs=40
+    sub_key, learning_rate=1.0e-3, n=10, batch_size=64, num_epochs=5
 )
 
 arr = np.array([p_losses, q_losses, accuracy, wall_clock_times])
 df = pd.DataFrame(
     arr.T, columns=["P Loss", "Q Loss", "Accuracy", "Epoch wall clock times"]
 )
-df.to_csv("./training_runs/genjax_air_rws_10_mvd_epochs_41.csv", index=False)
+df.to_csv("./training_runs/genjax_air_rws_10_mvd_epochs_6.csv", index=False)
 
 key, sub_key = jax.random.split(key)
 (p_losses, q_losses), accuracy, wall_clock_times, params = train(
-    sub_key, learning_rate=1.0e-4, n=10, batch_size=1, num_epochs=40
+    sub_key, learning_rate=1.0e-4, n=10, batch_size=1, num_epochs=5
 )
 
 arr = np.array([p_losses, q_losses, accuracy, wall_clock_times])
 df = pd.DataFrame(
     arr.T, columns=["P Loss", "Q Loss", "Accuracy", "Epoch wall clock times"]
 )
-df.to_csv("./training_runs/genjax_air_rws_10_mvd_epochs_41_bs1.csv", index=False)
+df.to_csv("./training_runs/genjax_air_rws_10_mvd_epochs_6_bs1.csv", index=False)

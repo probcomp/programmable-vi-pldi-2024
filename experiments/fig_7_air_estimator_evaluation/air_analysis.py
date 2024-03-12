@@ -28,7 +28,8 @@ hybrid_mvd_air = pd.read_csv(
 hybrid_iwae_mvd_air = pd.read_csv(
     "./training_runs/genjax_air_iwae_2_hybrid_mvd_enum_epochs_41.csv",
 )
-rws_air_mvd = pd.read_csv("./training_runs/genjax_air_rws_10_mvd_epochs_41.csv")
+rws_air_mvd = pd.read_csv("./training_runs/genjax_air_rws_10_mvd_epochs_6.csv")
+rws_air_mvd_bs1 = pd.read_csv("./training_runs/genjax_air_rws_10_mvd_epochs_6_bs1.csv")
 pyro_reinforce_air = pd.read_csv(
     "./training_runs/pyro_air_reinforce_epochs_41.csv",
 )
@@ -335,6 +336,17 @@ ax3.text(760, 0.67, "t ~ 16 mins", color="black", zorder=3, fontsize=label_fonts
 
 num_lines = 2
 cmap = plt.cm.get_cmap("cividis", num_lines)
+
+rws_air_l = go_plot_rws(
+    ax3,
+    rws_air_mvd_bs1,
+    "Epoch wall clock times",
+    "Accuracy",
+    "Ours (batch size = 1, RWS(K = 10))",
+    cmap,
+    0,
+    "x",
+)
 
 rws_air_l = go_plot_rws(
     ax3,
