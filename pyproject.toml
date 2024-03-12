@@ -3,7 +3,7 @@ name = "programmable-vi-pldi-2024"
 version = "0.0.1"
 package-mode = false
 description = "The evaluation artifact for Probabilistic Programming with Programmable Variational Inference."
-authors = ["McCoy Reynolds Becker <mccoyb@mit.edu>"]
+authors = ["McCoy Becker <mccoyb@mit.edu>", "Alexander Lew <alexlew@mit.edu>", "Xiaoyan Wang <xyw@mit.edu>", "Matin Ghavami <mghavami@mit.edu>", "Mathieu Huot <mhuot@mit.edu>", "Martin Rinard <rinard@mit.edu>", "Vikash Mansingkha <vkm@mit.edu>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
