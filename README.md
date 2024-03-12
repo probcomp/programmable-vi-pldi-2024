@@ -78,7 +78,7 @@ For guidance on usage of the exact library version included in this artifact, pl
 
 ## Reproducing the paper's claims
 
-We have provided code to reproduce all of the experiments in the paper, namely the results in Figure 2, Figure 7, Table 1, Table 2, and Table 4. At a high level, these experiments validate our claims that (1) our implementation introduces minimal overhead compared to hand-coded gradient estimators, (2) our implementation of variational inference is faster than Pyro's, and on par with NumPyro's, for algorithms that all systems can express, and (3) our system supports gradient estimators that Pyro and Numpyro do not automate, some of which empirically converge faster than the algorithms they do support.
+We have provided code to reproduce all of the experiments in the paper, namely the results in Figure 2, Figure 7, Table 1, Table 2, and Table 4. At a high level, these experiments validate our claims that (1) our implementation introduces minimal overhead compared to hand-coded gradient estimators, (2) our implementation of variational inference is faster than Pyro's, and on par with NumPyro's, for algorithms that all systems can express, and (3) our system supports gradient estimators that Pyro and NumPyro do not automate, some of which empirically converge faster than the algorithms they do support.
 
 We've organized the experiments code under the `experiments` directory. The `experiments` directory contains the following subdirectories, which map onto the figures and tables in the submitted version of the paper:
 
