@@ -65,7 +65,7 @@ for i in range(5000):
     ϕ = jtu.tree_map(lambda v, g: v + 1e-3 * jnp.mean(g), ϕ, ϕ_grads)
 ```
 
-The full code to run this example and plot results can be found in the `examples/fig_2_noisy_cone` directory.
+The full code to run this example and plot results can be found in the `experiments/fig_2_noisy_cone` directory.
 
 ### Documentation
 
