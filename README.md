@@ -116,7 +116,7 @@ docker run --runtime nvidia -it <YOUR_IMAGE_ID>
 
 where `<YOUR_IMAGE_ID>` is the hash of the image you built.
 
-With this method, you can ignore the setup below and jump to  [Running the experiments](https://github.com/probcomp/programmable-vi-pldi-2024/tree/main?tab=readme-ov-file#running-the-experiments).
+With this method, you can ignore the setup for `poetry` and `just` below, and jump to [GPU acceleration](https://github.com/probcomp/programmable-vi-pldi-2024/tree/main?tab=readme-ov-file#gpu-acceleration) (if you have access to a GPU) and then [Running the experiments](https://github.com/probcomp/programmable-vi-pldi-2024/tree/main?tab=readme-ov-file#running-the-experiments).
 
 #### Setup using `poetry` and `just`
 
