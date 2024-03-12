@@ -183,8 +183,5 @@ For our submission to PLDI, our hardware was a Linux box with a Nvidia RTX 4090,
 Note that even on GPU, Pyro's implementation of the reweighted wake-sleep (RWS) algorithm may be prohibitively slow.
 
 
-## Extending our work
-There are several ways to extend our work. We've provided [a tutorial notebook](./extending_our_work.ipynb) which covers a few of these ways:
-* (**Extending ADEV, the automatic differentiation algorithm, with new samplers equipped with gradient strategies.**) After implementing the ADEV interfaces for these objects, they can be freely lifted into the `Distribution` type of our language, and can be used in modeling and guide code. We illustrate this process by implementing `beta_implicit`, and using it in a model and guide program from the Pyro tutorials.
-* (**Implementing new loss functions, by utilizing the modeling interfaces in our language.**) We illustrate this process by implementing [SDOS](https://arxiv.org/abs/2103.01030), an estimator for a symmetric KL divergence, using our language and automated the derivation of gradients for a guide program.
-* (**Using a standard loss function (like `genjax.vi.elbo`) with new models and guides.**) By virtue of the programmability of our system, this is a standard means of extending our work. This extension is covered in the tutorial for the first case, above.
+## Building on our work
+There are several ways to build on our work. We've provided [a tutorial notebook](./extending_our_work.ipynb) which provides an introduction to our system in the context of using it for variational inference on new model and guide programs.
