@@ -100,9 +100,9 @@ Each directory contains code used to run the experiment, and also to reproduce t
 
 There are several possible ways to make an environment which can run the experiments.
 
-#### Are you reviewing our artifact for PLDI 2024?
+#### (PLDI 2024 REVIEWERS) Are you reviewing our artifact for PLDI 2024?
 
-Look here, we've setup a GPU accelerated environment for you which you can access at the static notebook url:
+We've setup a GPU accelerated environment for you which you can access at the static notebook url:
 > http://35.227.178.234:8888/lab?token=df49ccf872c953673d3c25f79bb96f8ac1f037f1ae24fe9a
 
 **There is only a single server, with a single GPU** If there are multiple reviewers, please coordinate to use the environment, as required. **Also, it should go without saying: please do not share this link with others.**
