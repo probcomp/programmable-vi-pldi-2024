@@ -9,3 +9,4 @@ data/
 figs/*.pdf
 figs/*.png
 .DS_Store
+*.tar.gz
