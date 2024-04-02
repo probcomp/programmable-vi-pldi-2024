@@ -10,8 +10,8 @@ readme = "README.md"
 adevjax = {path = "adevjax"}
 genjax = {path = "genjax", develop = true}
 python = "3.10.12"
-jax = "0.4.21"
-jaxlib="0.4.21"
+jax = "0.4.20"
+jaxlib="0.4.20"
 numpy = "1.26.4"
 tensorflow-probability = "0.21.0"
 equinox = "0.11.3"
