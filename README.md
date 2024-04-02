@@ -96,6 +96,7 @@ Each directory contains code used to run the experiment, and also to reproduce t
 
 * (**GPU likely required**) For `fig_7_air_estimator_evaluation`, `table_1_minibatch_gradient_benchmark`, and `table_2_benchmark_timings`, we recommend running on a GPU. These experiments illustrate various performance comparisons between our system, handcoded gradient estimators, and [Pyro](https://pyro.ai/) for several variational objectives and estimators.
 
+
 ### Setting up your environment
 
 There are several possible ways to make an environment which can run the experiments.
@@ -179,6 +180,29 @@ meaning that one can run any of these experiments using `just`, for example:
 ```
 just table_1
 ```
+
+### Abbreviations
+
+There are also several abbreviations which are not collected in a single place in the artifact:
+
+* AIR -- Attend, Infer, Repeat, a generative model of multi-object images
+* VAE -- variational autoencoder
+* ELBO -- evidence lower bound
+* MVD -- the measure valued derivative estimator
+* REINFORCE -- the score function derivative estimator
+* IWELBO -- importance weighted ELBO
+* HVI -- hierarchical variational inference
+* IWHVI -- importance weighted HVI
+* DIWHVI -- doubly importance weighted HVI
+
+### Correspondence between print out results and tables
+
+
+* (**Table 1**): For Table 1, "Ours" refers to the GenJAX VI timings. The rows of the table go by batch size, and the first array returned by the print out is the mean over several runs, the second is the std deviation.
+
+* (**Table 2**): To generate Table 2 in the paper, we took the mean and std dev numbers from the `pytest-benchmark` print out. The labels for the columns in the table are mapped from the names e.g. `genjax_reinforce` and `pyro_reinforce[TraceGraph_ELBO]` -> REINFORCE, `genjax_mvd` -> MVD, `genjax_iwae_mvd` -> IWAE + MVD, `pyro_reinforce[RenyiELBO]` -> IWAE + REINFORCE, etc.
+
+* (**Table 4**): For Table 4, the "IWAE" label is equivalent to "IWELBO", as is the RenyiELBO name (from Pyro and NumPyro). All system comparison experiments (Pyro and NumPyro) are labeled with their names in this table. We did not report standard deviation in this table, but for each experiment, the first array is the mean over several trials, and the second is standard deviation.
 
 ## Notes on artifact evaluation
 
