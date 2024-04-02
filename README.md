@@ -181,6 +181,8 @@ meaning that one can run any of these experiments using `just`, for example:
 just table_1
 ```
 
+## Interpreting the results
+
 ### Abbreviations
 
 There are also several abbreviations which are not collected in a single place in the artifact:
@@ -197,6 +199,7 @@ There are also several abbreviations which are not collected in a single place i
 
 ### Correspondence between print out results and tables
 
+Several of our experiments (the tables) print results to output. Below, we give a guide to interpreting the results:
 
 * (**Table 1**): For Table 1, "Ours" refers to the GenJAX VI timings. The rows of the table go by batch size, and the first array returned by the print out is the mean over several runs, the second is the std deviation.
 
