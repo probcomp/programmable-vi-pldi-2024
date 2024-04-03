@@ -103,13 +103,21 @@ There are several possible ways to make an environment which can run the experim
 
 #### Setup using `docker`
 
-Possibly the easiest way is to use [`docker`](https://docs.docker.com/). We've provided a `Dockerfile` with the repository, with a public image which we've curated. To setup an environment, run:
+Possibly the easiest way is to use [`docker`](https://docs.docker.com/). There are two ways to use `docker` to build an environment:
+
+**Dockerfile**
+We've provided a `Dockerfile` with the repository, with a public image which we've curated. To setup an environment, run:
 
 ```
 docker build .
 ```
 
-This will proceed to build a container which you can use. If the build succeeds, you can then run a virtual machine using the container:
+This will proceed to build a container which you can use. 
+
+**Docker Hub**
+We've pushed [an image to DockerHub](https://hub.docker.com/r/probcomp/programmable-vi/tags).
+
+Once you have a built image (either by building it yourself, or using the pre-built one from DockerHub), you can then run a virtual machine using the container:
 
 * **With GPU support (requires underlying Nvidia driver)**
 ```
