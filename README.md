@@ -170,7 +170,7 @@ To run _all of the experiments_, it suffices to run (**this will take a long tim
 just run_all
 ```
 
-The experiments will be run in order, and the figure results will be saved to the `./fig` directory at the top level as PDF files.
+The experiments will be run in order, and the figure results will be saved to the `./figs` directory at the top level as PDF files.
 
 You can also run each experiment individually, the set of recipes available via `just` are:
 ```
