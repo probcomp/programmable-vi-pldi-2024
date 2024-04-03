@@ -109,10 +109,16 @@ Possibly the easiest way is to use [`docker`](https://docs.docker.com/). We've p
 docker build .
 ```
 
-This will proceed to build a container which you can use:
+This will proceed to build a container which you can use. If the build succeeds, you can then run a virtual machine using the container:
 
+* **With GPU support (requires underlying Nvidia driver)**
 ```
 docker run --runtime nvidia -it <YOUR_IMAGE_ID>
+```
+
+* **Without GPU support**
+```
+docker run -it <YOUR_IMAGE_ID>
 ```
 
 where `<YOUR_IMAGE_ID>` is the hash of the image you built.
@@ -121,26 +127,29 @@ With this method, you can ignore the setup for `poetry` and `just` below, and ju
 
 #### Setup using `poetry` and `just`
 
-We utilize [`poetry`](https://python-poetry.org/docs/#installation) to manage Python dependencies, and utilize [`just`](https://github.com/casey/just) as a command runner. At a bare minimum, you'll need to install `poetry`, but we also recommend installing `just` to utilize some of our convenience commands (to run experiments, and get compatible versions of `torch` and `jaxlib`).
+There's an alternative path if you forego `docker`: we utilize [`poetry`](https://python-poetry.org/docs/#installation) to manage Python dependencies, and utilize [`just`](https://github.com/casey/just) as a command runner. We recommend installing both of these tools, using the documentation at the links provided (at a bare minimum, you'll need to install `poetry`, but we also recommend installing `just` to utilize some of our convenience commands (to run experiments, and get compatible versions of `torch` and `jaxlib`)).
 
-With `poetry` installed, you can use `poetry shell` to create a virtual environment. Run:
+With `poetry` installed, you can use `poetry install` to create and install our dependencies into a virtual environment. Run:
 ```
-poetry shell
 poetry install
 ```
-to instantiate a virtual environment and install the Python dependencies.
+to create and install dependencies into a virtual environment. Then, run:
+```
+poetry shell
+```
+to instantiate the virtual environment.
 
 #### GPU acceleration
 
 Several of our experiments are computationally intensive, and we recommend GPU acceleration.
 
-For GPU acceleration, we assume access to a CUDA 11 enabled environment. There is a convenience command to install `torch` and `jaxlib` with support for CUDA 11:
+For GPU acceleration, we assume access to a CUDA 12 enabled environment. There is a convenience command to install `torch` and `jaxlib` with support for CUDA 12:
 ```
 just gpu
 ```
 This will fetch versions of `torch` and `jaxlib` _which are compatible with each other_ (because we're benchmarking both `torch` and `jax`-enabled code). 
 
-The versions we've selected we've guaranteed for compatibility, so we recommend attempting to setup your system so that you can run this command successfully. If you have a CUDA 11 enabled system, and you ran `poetry install` as above (or you came from the `docker` setup), you should be okay.
+The versions we've selected we've guaranteed for compatibility, so we recommend attempting to setup your system so that you can run this command successfully. If you have a CUDA 12 enabled system, and you ran `poetry install` as above (or you came from the `docker` setup), you should be okay.
 
 ### Running the experiments
 
@@ -209,7 +218,9 @@ Several of our experiments (the tables) print results to output. Below, we give 
 
 ## Notes on artifact evaluation
 
-For our submission to PLDI, our hardware was a Linux box with a Nvidia RTX 4090, and an AMD Ryzen 7 7800x3D CPU. We also ran our experiments on a Linux box with an Nvidia Tesla V100 SMX2 16 GB, and an Intel Xeon (8) @ 2.2 GHz. In both experiment environments, we observed the same general trends, including the same order-of-magnitude speed-ups of our JAX-based gradient estimators compared to Pyro's.
+For our submission results, our hardware was a Linux box with a Nvidia RTX 4090, and an AMD Ryzen 7 7800x3D CPU, with CUDA support (checked via `nvidia-smi`) up to 12.4. 
+
+We also ran our experiments on a Linux box with an Nvidia Tesla V100 SMX2 16 GB, and an Intel Xeon (8) @ 2.2 GHz, with support for CUDA 12. In both experiment environments, we observed the same general trends, including the same order-of-magnitude speed-ups of our JAX-based gradient estimators compared to Pyro's.
 
 Note that even on GPU, Pyro's implementation of the reweighted wake-sleep (RWS) algorithm may be prohibitively slow (due to the `batch_size = 1` restriction).
 
