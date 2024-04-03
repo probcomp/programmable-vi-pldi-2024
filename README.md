@@ -4,6 +4,7 @@
 
 This repository contains the JAX implementation that accompanies the paper [_Probabilistic programming with programmable variational inference_](./pldi24_programmable_vi_original_submit.pdf), as well as the experiments used to generate figures and numbers in the empirical evaluation section.
 
+**Table of contents**
 * [Overview](#overview)
   + [Example](#example)
   + [Documentation](#documentation)
@@ -20,7 +21,6 @@ This repository contains the JAX implementation that accompanies the paper [_Pro
 * [Building on our work](#building-on-our-work)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
 
 ## Overview
 
