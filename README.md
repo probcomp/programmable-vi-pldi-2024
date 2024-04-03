@@ -103,7 +103,7 @@ There are several possible ways to make an environment which can run the experim
 
 #### Setup using `docker`
 
-Possibly the easiest way is to use [`docker`](https://docs.docker.com/). There are two ways to use `docker` to build an environment:
+If you're planning to use the GPU, or are on a Linux device (this process will not work natively on Mac OS or Windows, due to `jaxlib`) -- possibly the easiest way is to use [`docker`](https://docs.docker.com/). There are two ways to use `docker` to build an environment:
 
 * (**Docker Hub**) We've pushed [an image to Docker Hub](https://hub.docker.com/layers/probcomp/programmable-vi/latest/images/sha256-42a30281138c55509035b14ba7f42124262394fb559c151f36ad5d189b1f13a2?context=explore) which you can use directly.
 
@@ -136,7 +136,9 @@ With this method, you can ignore the setup for `poetry` and `just` below, and ju
 
 #### Setup using `poetry` and `just`
 
-There's an alternative path if you forego `docker`: we utilize [`poetry`](https://python-poetry.org/docs/#installation) to manage Python dependencies, and utilize [`just`](https://github.com/casey/just) as a command runner. We recommend installing both of these tools, using the documentation at the links provided (at a bare minimum, you'll need to install `poetry`, but we also recommend installing `just` to utilize some of our convenience commands (to run experiments, and get compatible versions of `torch` and `jaxlib`)).
+If you just want to run some of the experiments on CPU, or are on a Max -- there's a recommended alternative path to setup a working Python environment: we utilize [`poetry`](https://python-poetry.org/docs/#installation) to manage Python dependencies, and utilize [`just`](https://github.com/casey/just) as a command runner. 
+
+We recommend installing both of these tools, using the documentation at the links provided (at a bare minimum, you'll need to install `poetry`, but we also recommend installing `just` to utilize some of our convenience commands to run experiments).
 
 With `poetry` installed, you can use `poetry install` to create and install our dependencies into a virtual environment. Run:
 ```
@@ -147,6 +149,15 @@ to create and install dependencies into a virtual environment. Then, run:
 poetry shell
 ```
 to instantiate the virtual environment.
+
+Note that, if you're having issues with `poetry` environment creation via `poetry shell` or `poetry install` -- you can also managed a `conda` environment directly:
+
+**Using `conda` with `poetry`**
+```
+conda create --name programmable-vi-3.10.12 python=3.10.12
+conda activate programmable-vi-3.10.12
+poetry install
+```
 
 #### GPU acceleration
 
