@@ -150,9 +150,11 @@ poetry shell
 ```
 to instantiate the virtual environment.
 
-Note that, if you're having issues with `poetry` environment creation via `poetry shell` or `poetry install` -- you can also managed a `conda` environment directly:
 
 **Using `conda` with `poetry`**
+
+Note that, if you're having issues with `poetry` environment creation via `poetry shell` or `poetry install` -- you can also managed a `conda` environment directly (by e.g using [`miniconda`](https://docs.anaconda.com/free/miniconda/)).
+
 ```
 conda create --name programmable-vi-3.10.12 python=3.10.12
 conda activate programmable-vi-3.10.12
