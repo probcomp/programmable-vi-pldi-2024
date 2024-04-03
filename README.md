@@ -105,7 +105,7 @@ There are several possible ways to make an environment which can run the experim
 
 Possibly the easiest way is to use [`docker`](https://docs.docker.com/). There are two ways to use `docker` to build an environment:
 
-* (**Docker Hub**) We've pushed [an image to Docker Hub](https://hub.docker.com/r/probcomp/programmable-vi/tags) which you can use directly.
+* (**Docker Hub**) We've pushed [an image to Docker Hub](https://hub.docker.com/layers/probcomp/programmable-vi/latest/images/sha256-42a30281138c55509035b14ba7f42124262394fb559c151f36ad5d189b1f13a2?context=explore) which you can use directly.
 
 * (**Dockerfile**) We've provided a `Dockerfile` with the repository. To build an image, run:
   ```
