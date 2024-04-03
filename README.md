@@ -122,6 +122,8 @@ Once you have a built image (either by building it yourself, or using the pre-bu
   docker run --runtime nvidia -it <YOUR_IMAGE_ID>
   ```
 
+  **NOTE**: you may need to install [the Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) ([github](https://github.com/NVIDIA/nvidia-container-toolkit)) to support usage of the `--runtime nvidia` flag with Docker.
+
 * **Without GPU support**
   If you don't have access to a GPU, you can still run the image using (without GPU support):
   ```
