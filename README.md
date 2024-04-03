@@ -4,6 +4,24 @@
 
 This repository contains the JAX implementation that accompanies the paper [_Probabilistic programming with programmable variational inference_](./pldi24_programmable_vi_original_submit.pdf), as well as the experiments used to generate figures and numbers in the empirical evaluation section.
 
+* [Overview](#overview)
+  + [Example](#example)
+  + [Documentation](#documentation)
+* [Reproducing the paper's claims](#reproducing-the-paper-s-claims)
+  + [Setting up your environment](#setting-up-your-environment)
+    - [Setup using `docker`](#setup-using--docker-)
+    - [Setup using `poetry` and `just`](#setup-using--poetry--and--just-)
+    - [GPU acceleration](#gpu-acceleration)
+  + [Running the experiments](#running-the-experiments)
+* [Interpreting the results](#interpreting-the-results)
+  + [Abbreviations](#abbreviations)
+  + [Correspondence between print out results and tables](#correspondence-between-print-out-results-and-tables)
+* [Notes on artifact evaluation](#notes-on-artifact-evaluation)
+* [Building on our work](#building-on-our-work)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
 ## Overview
 
 The artifact accompanying our paper is a Python library for probabilistic programming with variational inference.
