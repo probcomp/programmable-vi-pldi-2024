@@ -156,7 +156,7 @@ just gpu
 ```
 This will fetch versions of `torch` and `jaxlib` _which are compatible with each other_ (because we're benchmarking both `torch` and `jax`-enabled code). 
 
-The versions we've selected we've guaranteed for compatibility, so we recommend attempting to setup your system so that you can run this command successfully. If you have a CUDA 12 enabled system, and you ran `poetry install` as above (or you came from the `docker` setup), you should be okay.
+The versions we've selected for `torch` and `jaxlib` we've checked for compatibility on a device with Nvidia driver support up to CUDA 12.4 (as checked via `nvidia-smi`): if you want GPU acceleration, we recommend attempting to setup your system so that you can run this command successfully. If you have a CUDA 12 enabled system, you should be okay, but please report any issues to us on this repository.
 
 ### Running the experiments
 
