@@ -136,7 +136,7 @@ With this method, you can ignore the setup for `poetry` and `just` below, and ju
 
 #### Setup using `poetry` and `just`
 
-If you just want to run some of the experiments on CPU, or are on a Max -- there's a recommended alternative path to setup a working Python environment: we utilize [`poetry`](https://python-poetry.org/docs/#installation) to manage Python dependencies, and utilize [`just`](https://github.com/casey/just) as a command runner. 
+If you just want to run some of the experiments on CPU, or are on a Mac -- there's a recommended alternative path to setup a working Python environment: we utilize [`poetry`](https://python-poetry.org/docs/#installation) to manage Python dependencies, and utilize [`just`](https://github.com/casey/just) as a command runner. 
 
 We recommend installing both of these tools, using the documentation at the links provided (at a bare minimum, you'll need to install `poetry`, but we also recommend installing `just` to utilize some of our convenience commands to run experiments).
 
