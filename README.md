@@ -232,6 +232,13 @@ just table_1
 
 ## Interpreting the results
 
+**Moving figures to your local device**
+Note that, if you used Docker to run the experiments and produce figures into `./figs`, you can copy them to your local machine using `docker cp`:
+
+```
+docker cp <container id>:/home/wizard/figs /tmp
+```
+
 ### Abbreviations
 
 There are also several abbreviations which are not collected in a single place in the artifact:
