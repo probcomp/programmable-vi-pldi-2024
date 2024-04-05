@@ -254,8 +254,10 @@ There are also several abbreviations which are not collected in a single place i
 * DIWHVI -- doubly importance weighted HVI
 
 ### Correspondence between print out results and tables
-
 Several of our experiments (the experiments which produce results for the tables) print out results to stdout. Below, we give a guide to interpreting the results:
+
+**Sign convention** Systems which implement variational optimization can vary in terms of their sign convention for objective values. In our system, we consider _maximization_ (maximizing the ELBO). Pyro and NumPyro consider _minimization_ (minimizing the negative ELBO). These two processes are equivalent. Note that our print outs don't choose a standard, but our reported results do (we convert Pyro and NumPyro negative objective values to objective values by multiplying by -1).
+
 
 * (**Table 1**): For Table 1, "Ours" refers to the GenJAX VI timings. The rows of the table go by batch size, and the first array returned by the print out is the mean over several runs, the second is the std deviation.
 
