@@ -13,8 +13,6 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash 
 
 RUN groupadd -g 1001 wizard
 RUN useradd -rm -d /home/wizard -s /bin/bash -g wizard -G sudo -u 1001 wizard
-RUN mkdir /home/wizard/figs
-RUN chmod 777 /home/wizard/figs
 USER wizard
 WORKDIR /home/wizard
 RUN pipx ensurepath
