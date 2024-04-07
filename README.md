@@ -243,12 +243,12 @@ docker cp <container id>:/home/wizard/figs /tmp
 
 There are also several abbreviations which are not collected in a single place in the artifact:
 
-* AIR -- Attend, Infer, Repeat, a generative model of multi-object images
+* AIR -- _Attend, Infer, Repeat_, a generative model of multi-object images
 * VAE -- variational autoencoder
 * ELBO -- evidence lower bound
 * MVD -- the measure valued derivative estimator
 * REINFORCE -- the score function derivative estimator
-* IWELBO -- importance weighted ELBO
+* (IWELBO, or IWAE) -- importance weighted ELBO
 * HVI -- hierarchical variational inference
 * IWHVI -- importance weighted HVI
 * DIWHVI -- doubly importance weighted HVI
@@ -259,21 +259,23 @@ Several of our experiments (the experiments which produce results for the tables
 **Sign convention** Systems which implement variational optimization can vary in terms of their sign convention for objective values. In our system, we consider _maximization_ (maximizing the ELBO). Pyro and NumPyro consider _minimization_ (minimizing the negative ELBO). These two processes are equivalent. Note that our print outs don't choose a standard, but our reported results do (we convert Pyro and NumPyro negative objective values to objective values by multiplying by -1).
 
 
-* (**Table 1**): For Table 1, "Ours" refers to the GenJAX VI timings. The rows of the table go by batch size, and the first array returned by the print out is the mean over several runs, the second is the std deviation.
+* (**Table 1**): For Table 1, you'll see a print out which looks like the following:
+
+  "Ours" refers to the GenJAX VI timings. The rows of the table go by batch size, and the first array returned by the print out is the mean over several runs, the second is the standard deviation.
 
 * (**Table 2**): To generate Table 2 in the paper, we use [`pytest-benchmark`](https://pypi.org/project/pytest-benchmark/) to generate timing statistics. The print out will likely look something like this:
   
   ![Table 2 print out](./table_2_print_out.png)
 
-  The labels for the columns in the table are mapped from the names e.g. 
+  We took the `Mean` and `StdDev` column numbers to generate the results (of form $\text{Mean} \pm \text{StdDev}$) in Table 2. The labels and the numbers for the columns in Table 2 are mapped from the names in the print out e.g. 
   * `genjax_reinforce` and `pyro_reinforce[TraceGraph_ELBO]` -> REINFORCE
   * `genjax_mvd` -> MVD
   * `genjax_iwae_mvd` -> IWAE + MVD
-  * `pyro_reinforce[RenyiELBO]` -> IWAE + REINFORCE
+  * `genjax_iwae_reinforce` and `pyro_reinforce[RenyiELBO]` -> IWAE + REINFORCE
 
-  and so on. Each of these names correspond to particular _gradient estimators strategies_ used in variational inference. 
+  Each of the names on the right hand side of the arrows above correspond to particular _gradient estimators strategies_ used in variational inference. 
 
-* (**Table 4**): For Table 4, the "IWAE" label is equivalent to "IWELBO", as is the RenyiELBO name (from Pyro and NumPyro). All system comparison experiments (Pyro and NumPyro) are labeled with their names in this table. We did not report standard deviation in this table, but for each experiment, the first array is the mean over several trials, and the second is standard deviation.
+* (**Table 4**): For Table 4, (as mentioned in **Abbreviations**) the "IWAE" label is equivalent to "IWELBO", as is the RenyiELBO name (from Pyro and NumPyro). All system comparison experiments (Pyro and NumPyro) are labeled with their names in this table. We did not report the standard deviation in this table, but for each experiment, the first array is the mean over several trials, and the second is standard deviation.
 
 ## Notes on artifact evaluation
 

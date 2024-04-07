@@ -6,7 +6,7 @@ import pyro
 import pyro.contrib.examples.multi_mnist as multi_mnist
 import pytest
 import torch
-from pyro.infer import ELBO, SVI, RenyiELBO, TraceGraph_ELBO
+from pyro.infer import ELBO, SVI, RenyiELBO, TraceGraph_ELBO, TraceEnum_ELBO
 from pyro.optim import Adam
 from pyro_air import AIR, get_per_param_lr, make_prior
 
@@ -83,7 +83,11 @@ def train_air(svi: SVI, air: AIR, multi_mnist_data: Tuple[torch.Tensor, torch.Te
         # accuracy, counts, error_z, error_ix = count_accuracy(data, true_counts, air, 1000)
 
 
-@pytest.mark.parametrize("elbo", [TraceGraph_ELBO(), RenyiELBO(alpha=0)], ids=type)
+@pytest.mark.parametrize(
+    "elbo",
+    [TraceGraph_ELBO(), TraceEnum_ELBO(), RenyiELBO(alpha=0, num_particles=2)],
+    ids=type,
+)
 def test_benchmark_pyro_reinforce(
     benchmark, elbo: ELBO, multi_mnist_data: Tuple[torch.Tensor, torch.Tensor]
 ):
