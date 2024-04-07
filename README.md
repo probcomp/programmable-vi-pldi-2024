@@ -265,7 +265,7 @@ Several of our experiments (the experiments which produce results for the tables
 
 * (**Table 2**): To generate Table 2 in the paper, we use [`pytest-benchmark`](https://pypi.org/project/pytest-benchmark/) to generate timing statistics. The print out will likely look something like this:
   
-  ![Table 2 print out](./table_2_print_out.png)
+  ![Table 2 print out](table_2_print_out.png)
 
   We took the `Mean` and `StdDev` column numbers to generate the results (of form $\text{Mean} \pm \text{StdDev}$) in Table 2. The labels and the numbers for the columns in Table 2 are mapped from the names in the print out e.g. 
   * `genjax_reinforce` and `pyro[TraceGraph_ELBO]` -> REINFORCE
