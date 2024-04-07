@@ -269,7 +269,7 @@ Several of our experiments (the experiments which produce results for the tables
 <img src="table_2_print_out.png"/>
 </p>
 
-  We took the `Mean` and `StdDev` column numbers to generate the results (of form $\text{Mean} \pm \text{StdDev}$) in Table 2. 
+  We took the `Mean` and `StdDev` column numbers to generate the results (of form $\text{Mean} \pm \text{StdDev}$) in our report's Table 2. 
   
 <p align="center">
 <img src="table_2.png"/>
