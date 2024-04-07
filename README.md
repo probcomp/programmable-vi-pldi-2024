@@ -278,9 +278,9 @@ which we used to produce Table 1:
 
 ![table_1](table_1.png)
 
-The "columns" of the print out match to the batch size column: the first array returned by the print out is the row of mean timings over several runs, the second row is the standard deviation of timings over those runs.
+The "columns" of the print out match to the batch size column: for each timing experiment, the first array in the tuple returned by the print out is the row of _mean_ ($\text{Mean}$) timings over several runs, the second array in the tuple is the _standard deviation_ ($\text{StdDev}$) of timings over those runs. We take each of these and map them into the format $\text{Mean}\pm\text{StdDev}$ in Table 1.
 
-For `GenJAX VI timings`, we take the first row and map that to the $\text{Ours}$ column in Table 1. For `Handcoded timings`, we take the first row and map that to the $\text{Hand coded}$ column in Table 1.
+The numbers from `GenJAX VI timings` are mapped to the $\text{Ours}$ column in Table 1. The numbers from `Handcoded timings` are mapped to the $\text{Hand coded}$ column in Table 1.
 
 #### Table 2
 
