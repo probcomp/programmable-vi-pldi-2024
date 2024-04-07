@@ -259,78 +259,84 @@ Several of our experiments (the experiments which produce results for the tables
 **Sign convention** Systems which implement variational optimization can vary in terms of their sign convention for objective values. In our system, we consider _maximization_ (maximizing the ELBO). Pyro and NumPyro consider _minimization_ (minimizing the negative ELBO). These two processes are equivalent. Note that our print outs don't choose a standard, but our reported results do (we convert Pyro and NumPyro negative objective values to objective values by multiplying by -1).
 
 
-* (**Table 1**): For Table 1, you'll see a print out which looks like the following (specific numbers will depend on your runtime environment):
+#### Table 1
 
-  ```
-  GenJAX VI timings:
-  Batch sizes: [64, 128, 256, 512, 1024]
-  (array([0.17483307, 0.23848654, 0.40820748, 0.74701416, 1.5442369 ], dtype=float32), 
-   array([0.08583035, 0.06719527, 0.13345473, 0.24723288, 0.5431073 ], dtype=float32))
-  Handcoded timings:
-  Batch sizes: [64, 128, 256, 512, 1024]
-  (array([0.13013603, 0.21644622, 0.43758354, 0.75196713, 1.5987686 ], dtype=float32), 
-   array([0.03493173, 0.07299326, 0.18554626, 0.26609895, 0.55678135], dtype=float32))
-  ```
+For Table 1, you'll see a print out which looks like the following (specific numbers will depend on your runtime environment):
+  
+```
+GenJAX VI timings:
+Batch sizes: [64, 128, 256, 512, 1024]
+(array([0.17483307, 0.23848654, 0.40820748, 0.74701416, 1.5442369 ], dtype=float32), 
+  array([0.08583035, 0.06719527, 0.13345473, 0.24723288, 0.5431073 ], dtype=float32))
+Handcoded timings:
+Batch sizes: [64, 128, 256, 512, 1024]
+(array([0.13013603, 0.21644622, 0.43758354, 0.75196713, 1.5987686 ], dtype=float32), 
+  array([0.03493173, 0.07299326, 0.18554626, 0.26609895, 0.55678135], dtype=float32))
+```
 
-  The "columns" of the print out match to the batch size: first array returned by the print out is the row of mean timings over several runs, the second row is the standard deviation of timings over those runs.
+The "columns" of the print out match to the batch size: first array returned by the print out is the row of mean timings over several runs, the second row is the standard deviation of timings over those runs.
 
-* (**Table 2**): To generate Table 2 in the paper, we use [`pytest-benchmark`](https://pypi.org/project/pytest-benchmark/) to generate timing statistics. The print out will likely look something like this (the specific numbers will depend on your runtime environment -- but the general trend, that our timings are orders of magnitude faster than Pyro, doesn't depend on runtime):
+#### Table 2
+
+To generate Table 2 in the paper, we use [`pytest-benchmark`](https://pypi.org/project/pytest-benchmark/) to generate timing statistics. The print out will likely look something like this (the specific numbers will depend on your runtime environment -- but the general trend, that our timings are orders of magnitude faster than Pyro, doesn't depend on runtime):
 
 ![table_2_print_out](table_2_print_out.png)
 
-  We took the `Mean` and `StdDev` column numbers to generate the results (of form $\text{Mean} \pm \text{StdDev}$) in our report's Table 2. 
+We took the `Mean` and `StdDev` column numbers to generate the results (of form $\text{Mean} \pm \text{StdDev}$) in our report's Table 2. 
 
 ![table_fn](table_2.png)
 
-  The labels and the numbers for the columns in Table 2 are mapped from the names in the print out e.g. 
-  * `genjax_reinforce` and `pyro[TraceGraph_ELBO]` -> REINFORCE
-  * `genjax_mvd` -> MVD
-  * `genjax_enum` and `pyro[TraceEnum_ELBO]` -> ENUM
-  * `genjax_iwae_reinforce` and `pyro_reinforce[RenyiELBO]` -> IWAE + REINFORCE
-  * `genjax_iwae_mvd` -> IWAE + MVD
+The labels and the numbers for the columns in Table 2 are mapped from the names in the print out e.g. 
+* `genjax_reinforce` and `pyro[TraceGraph_ELBO]` -> REINFORCE
+* `genjax_mvd` -> MVD
+* `genjax_enum` and `pyro[TraceEnum_ELBO]` -> ENUM
+* `genjax_iwae_reinforce` and `pyro_reinforce[RenyiELBO]` -> IWAE + REINFORCE
+* `genjax_iwae_mvd` -> IWAE + MVD
 
-  Each of the names on the right hand side of the arrows above correspond to particular _gradient estimators strategies_ used in variational inference. 
+Each of the names on the right hand side of the arrows above correspond to particular _gradient estimators strategies_ used in variational inference. 
 
-* (**Table 4**): For Table 4, (as mentioned in **Abbreviations**), you'll see a print out which looks like this:
-  ```
-  poetry run python experiments/table_4_objective_values/genjax_cone.py
-  ELBO:
-  (Array(-8.0759735, dtype=float32), Array(0.8189303, dtype=float32))
-  IWAE(K = 5):
-  (Array(-7.674431, dtype=float32), Array(2.659954, dtype=float32))
+#### Table 4
 
-  poetry run python experiments/table_4_objective_values/genjax_cone_marginal.py
-  HVI-ELBO(N = 1):
-  (Array(-9.751299, dtype=float32), Array(0.9588641, dtype=float32))
-  IWHVI(N = 5, K = 1):
-  (Array(-8.182691, dtype=float32), Array(0.91353637, dtype=float32))
-  IWHVI(N = 5, K = 5) (also called DIWHVI):
-  (Array(-7.298371, dtype=float32), Array(1.6482085, dtype=float32))
+For Table 4, (as mentioned in **Abbreviations**), you'll see a print out which looks like this:
+```
+poetry run python experiments/table_4_objective_values/genjax_cone.py
+ELBO:
+(Array(-8.0759735, dtype=float32), Array(0.8189303, dtype=float32))
+IWAE(K = 5):
+(Array(-7.674431, dtype=float32), Array(2.659954, dtype=float32))
 
-  poetry run python experiments/table_4_objective_values/numpyro_cone.py
-  100%|█████████████████████| 6000/6000 [00:01<00:00, 5377.34it/s, init loss: 450.7343, avg. loss [5701-6000]: 8.0853]
-  NumPyro TraceGraph ELBO:
-  (Array(8.087664, dtype=float32), Array(0.11515266, dtype=float32))
-  100%|██████████████████████| 6000/6000 [00:01<00:00, 5432.70it/s, init loss: 71.4061, avg. loss [5701-6000]: 7.9096]
-  NumPyro RenyiELBO(k = 5):
-  (Array(7.869861, dtype=float32), Array(1.9360248, dtype=float32))
+poetry run python experiments/table_4_objective_values/genjax_cone_marginal.py
+HVI-ELBO(N = 1):
+(Array(-9.751299, dtype=float32), Array(0.9588641, dtype=float32))
+IWHVI(N = 5, K = 1):
+(Array(-8.182691, dtype=float32), Array(0.91353637, dtype=float32))
+IWHVI(N = 5, K = 5) (also called DIWHVI):
+(Array(-7.298371, dtype=float32), Array(1.6482085, dtype=float32))
 
-  poetry run python experiments/table_4_objective_values/pyro_cone.py
-  Guessed max_plate_nesting = 1
-  Pyro ELBO:
-  (tensor(8.0826), tensor(0.1097))
-  Guessed max_plate_nesting = 1
-  Pyro IWAE(K = 5):
-  (tensor(7.8314), tensor(2.4545))
-  ```
+poetry run python experiments/table_4_objective_values/numpyro_cone.py
+100%|█████████████████████| 6000/6000 [00:01<00:00, 5377.34it/s, init loss: 450.7343, avg. loss [5701-6000]: 8.0853]
+NumPyro TraceGraph ELBO:
+(Array(8.087664, dtype=float32), Array(0.11515266, dtype=float32))
+100%|██████████████████████| 6000/6000 [00:01<00:00, 5432.70it/s, init loss: 71.4061, avg. loss [5701-6000]: 7.9096]
+NumPyro RenyiELBO(k = 5):
+(Array(7.869861, dtype=float32), Array(1.9360248, dtype=float32))
 
-  We've added spaces in the above example print out between the independent experiments involved in Table 4.
+poetry run python experiments/table_4_objective_values/pyro_cone.py
+Guessed max_plate_nesting = 1
+Pyro ELBO:
+(tensor(8.0826), tensor(0.1097))
+Guessed max_plate_nesting = 1
+Pyro IWAE(K = 5):
+(tensor(7.8314), tensor(2.4545))
+```
 
-  A few things to note:
-  * The IWAE label is equivalent to IWELBO, as is the RenyiELBO name (from the experiments on Pyro and NumPyro). 
-  * All system comparison experiments (Pyro and NumPyro) are labeled with their names in this table. 
-  * We did not report the standard deviation in this table: for each experiment, the first array is the mean over several trials, and the second is standard deviation.
-  * Pyro and NumPyro use the negative ELBO as their objective (negative ELBO minimization), to compare with `genjax.vi` (and what we've done in Table 4) is apply a minus sign to the Pyro and NumPyro results.
+We've added spaces in the above example print out between the independent experiments involved in Table 4.
+
+A few things to note:
+* The IWAE label is equivalent to IWELBO, as is the RenyiELBO name (from the experiments on Pyro and NumPyro). 
+* All system comparison experiments (Pyro and NumPyro) are labeled with their names in this table. 
+* We did not report the standard deviation in this table: for each experiment, the first array is the mean over several trials, and the second is standard deviation.
+* Pyro and NumPyro use the negative ELBO as their objective (negative ELBO minimization), to compare with `genjax.vi` (and what we've done in Table 4) is apply a minus sign to the Pyro and NumPyro results.
 
 ## Notes on artifact evaluation
 
