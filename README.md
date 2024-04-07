@@ -295,7 +295,46 @@ Several of our experiments (the experiments which produce results for the tables
 
   Each of the names on the right hand side of the arrows above correspond to particular _gradient estimators strategies_ used in variational inference. 
 
-* (**Table 4**): For Table 4, (as mentioned in **Abbreviations**) the "IWAE" label is equivalent to "IWELBO", as is the RenyiELBO name (from Pyro and NumPyro). All system comparison experiments (Pyro and NumPyro) are labeled with their names in this table. We did not report the standard deviation in this table, but for each experiment, the first array is the mean over several trials, and the second is standard deviation.
+* (**Table 4**): For Table 4, (as mentioned in **Abbreviations**), you'll see a print out which looks like this:
+  ```
+  poetry run python experiments/table_4_objective_values/genjax_cone.py
+  ELBO:
+  (Array(-8.0759735, dtype=float32), Array(0.8189303, dtype=float32))
+  IWAE(K = 5):
+  (Array(-7.674431, dtype=float32), Array(2.659954, dtype=float32))
+
+  poetry run python experiments/table_4_objective_values/genjax_cone_marginal.py
+  HVI-ELBO(N = 1):
+  (Array(-9.751299, dtype=float32), Array(0.9588641, dtype=float32))
+  IWHVI(N = 5, K = 1):
+  (Array(-8.182691, dtype=float32), Array(0.91353637, dtype=float32))
+  IWHVI(N = 5, K = 5) (also called DIWHVI):
+  (Array(-7.298371, dtype=float32), Array(1.6482085, dtype=float32))
+
+  poetry run python experiments/table_4_objective_values/numpyro_cone.py
+  100%|█████████████████████| 6000/6000 [00:01<00:00, 5377.34it/s, init loss: 450.7343, avg. loss [5701-6000]: 8.0853]
+  NumPyro TraceGraph ELBO:
+  (Array(8.087664, dtype=float32), Array(0.11515266, dtype=float32))
+  100%|██████████████████████| 6000/6000 [00:01<00:00, 5432.70it/s, init loss: 71.4061, avg. loss [5701-6000]: 7.9096]
+  NumPyro RenyiELBO(k = 5):
+  (Array(7.869861, dtype=float32), Array(1.9360248, dtype=float32))
+
+  poetry run python experiments/table_4_objective_values/pyro_cone.py
+  Guessed max_plate_nesting = 1
+  Pyro ELBO:
+  (tensor(8.0826), tensor(0.1097))
+  Guessed max_plate_nesting = 1
+  Pyro IWAE(K = 5):
+  (tensor(7.8314), tensor(2.4545))
+  ```
+
+  We've added spaces in the above example print out between the independent experiments involved in Table 4.
+
+  A few things to note:
+  * "IWAE" label is equivalent to "IWELBO", as is the RenyiELBO name (from Pyro and NumPyro). 
+  * All system comparison experiments (Pyro and NumPyro) are labeled with their names in this table. 
+  * We did not report the standard deviation in this table: for each experiment, the first array is the mean over several trials, and the second is standard deviation.
+  * Pyro and NumPyro use the negative ELBO as their objective (negative ELBO minimization), to compare with `genjax.vi` (and what we've done in Table 4) is apply a minus sign to the Pyro and NumPyro results.
 
 ## Notes on artifact evaluation
 
