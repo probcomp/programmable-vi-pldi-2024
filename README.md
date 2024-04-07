@@ -280,7 +280,7 @@ which we used to produce Table 1:
 
 The "columns" of the print out match to the batch size column: the first array returned by the print out is the row of mean timings over several runs, the second row is the standard deviation of timings over those runs.
 
-For `GenJAX VI timings`, we take the first row and map that to the $Ours$ column in Table 1. For `Handcoded timings`, we take the first row and map that to the $Hand coded$ column in Table 1.
+For `GenJAX VI timings`, we take the first row and map that to the $\text{Ours}$ column in Table 1. For `Handcoded timings`, we take the first row and map that to the $\text{Hand coded}$ column in Table 1.
 
 #### Table 2
 
