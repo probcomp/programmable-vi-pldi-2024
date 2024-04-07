@@ -274,7 +274,13 @@ Batch sizes: [64, 128, 256, 512, 1024]
   array([0.03493173, 0.07299326, 0.18554626, 0.26609895, 0.55678135], dtype=float32))
 ```
 
-The "columns" of the print out match to the batch size: first array returned by the print out is the row of mean timings over several runs, the second row is the standard deviation of timings over those runs.
+which we used to produce Table 1:
+
+![table_1](table_1.png)
+
+The "columns" of the print out match to the batch size column: the first array returned by the print out is the row of mean timings over several runs, the second row is the standard deviation of timings over those runs.
+
+For `GenJAX VI timings`, we take the first row and map that to the $Ours$ column in Table 1. For `Handcoded timings`, we take the first row and map that to the $Hand coded$ column in Table 1.
 
 #### Table 2
 
