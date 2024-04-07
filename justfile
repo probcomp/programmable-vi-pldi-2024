@@ -37,7 +37,7 @@ table_1:
 # generate the numbers for table_2_benchmark_timings
 # Not a plot, just timings printed out using `pytest-benchmark`.
 table_2:
-  poetry run pytest experiments/table_2_benchmark_timings --benchmark-disable-gc
+  poetry run pytest experiments/table_2_benchmark_timings --benchmark-warmup=on --benchmark-warmup-iterations=1
 
 # generate the numbers for table_4_objective_values
 # Not a plot, just timings printed out.

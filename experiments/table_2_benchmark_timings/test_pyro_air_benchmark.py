@@ -88,7 +88,7 @@ def train_air(svi: SVI, air: AIR, multi_mnist_data: Tuple[torch.Tensor, torch.Te
     [TraceGraph_ELBO(), TraceEnum_ELBO(), RenyiELBO(alpha=0, num_particles=2)],
     ids=type,
 )
-def test_benchmark_pyro_reinforce(
+def test_benchmark_pyro(
     benchmark, elbo: ELBO, multi_mnist_data: Tuple[torch.Tensor, torch.Tensor]
 ):
     air = AIR(**air_model_args)
