@@ -276,11 +276,11 @@ Several of our experiments (the experiments which produce results for the tables
 
 * (**Table 2**): To generate Table 2 in the paper, we use [`pytest-benchmark`](https://pypi.org/project/pytest-benchmark/) to generate timing statistics. The print out will likely look something like this (the specific numbers will depend on your runtime environment -- but the general trend, that our timings are orders of magnitude faster than Pyro, doesn't depend on runtime):
 
-  ![table_2_print_out](table_2_print_out.png)
+![table_2_print_out](table_2_print_out.png)
 
   We took the `Mean` and `StdDev` column numbers to generate the results (of form $\text{Mean} \pm \text{StdDev}$) in our report's Table 2. 
 
-  ![table_fn](table_2.png)
+![table_fn](table_2.png)
 
   The labels and the numbers for the columns in Table 2 are mapped from the names in the print out e.g. 
   * `genjax_reinforce` and `pyro[TraceGraph_ELBO]` -> REINFORCE
