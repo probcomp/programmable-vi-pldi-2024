@@ -261,7 +261,7 @@ Several of our experiments (the experiments which produce results for the tables
 
 #### Table 1
 
-For Table 1, you'll see a print out which looks like the following (specific numbers will depend on your runtime environment):
+For Table 1, you'll see a print out which looks like the following (specific numbers may depend on your runtime environment):
   
 ```
 GenJAX VI timings:
@@ -278,7 +278,7 @@ The "columns" of the print out match to the batch size: first array returned by 
 
 #### Table 2
 
-To generate Table 2 in the paper, we use [`pytest-benchmark`](https://pypi.org/project/pytest-benchmark/) to generate timing statistics. The print out will likely look something like this (the specific numbers will depend on your runtime environment -- but the general trend, that our timings are orders of magnitude faster than Pyro, doesn't depend on runtime):
+To generate Table 2 in the paper, we use [`pytest-benchmark`](https://pypi.org/project/pytest-benchmark/) to generate timing statistics. The print out will likely look something like this (the specific numbers may depend on your runtime environment -- but the general trend, that our timings are orders of magnitude faster than Pyro, doesn't depend on runtime):
 
 ![table_2_print_out](table_2_print_out.png)
 
@@ -297,7 +297,7 @@ Each of the names on the right hand side of the arrows above correspond to parti
 
 #### Table 4
 
-For Table 4, (as mentioned in **Abbreviations**), you'll see a print out which looks like this:
+For Table 4, (as mentioned in **Abbreviations**), you'll see a print out which looks like this (specific numbers may depend on your runtime environment):
 ```
 poetry run python experiments/table_4_objective_values/genjax_cone.py
 ELBO:
@@ -330,10 +330,12 @@ Pyro IWAE(K = 5):
 (tensor(7.8314), tensor(2.4545))
 ```
 
-We've added spaces in the above print out between the independent experiments involved in Table 4.
+We've added spaces in the above print out between the independent experiments involved in producing Table 4:
+
+![table_4](table_4.png)
 
 A few things to note:
-* (**Abbreviations**) The IWAE label is equivalent to IWELBO, as is the RenyiELBO name (from the experiments on Pyro and NumPyro). 
+* (**Abbreviations and name changes**) In the print out, the IWAE and RenyiELBO labels are equivalent to IWELBO in Table 4. The number of importance weighted samples (in the print out, `K = 5`) is converted to $n = 5$ in Table 4 (e.g. for `Pyro IWAE(K = 5)` and our `IWAE(K = 5)`). In the experiments, `HVI-ELBO` is equivalent to `HVI` in Table 4. All other names are the same between the print out and Table 4.
 * All system comparison experiments (Pyro and NumPyro) are labeled with their names in this table. 
 * (**What the numbers mean**) We did not report the standard deviation in this table: for each experiment, the first array is the mean over several trials, and the second is standard deviation.
 * **(Objective value convention)** Pyro and NumPyro use the negative ELBO as their objective (negative ELBO minimization), to compare with `genjax.vi` (and what we've done in Table 4) is apply a minus sign to the Pyro and NumPyro results.
