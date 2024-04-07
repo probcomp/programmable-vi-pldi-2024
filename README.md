@@ -336,7 +336,14 @@ Pyro IWAE(K = 5):
 (tensor(7.8314), tensor(2.4545))
 ```
 
-We've added spaces in the above print out between the independent experiments involved in producing Table 4:
+We've added spaces in the above print out between the independent experiments involved in producing Table 4. Every experiment produces a tuple e.g.
+
+```
+Pyro IWAE(K = 5):
+(tensor(7.8314), tensor(2.4545))
+```
+
+the first element is the mean objective value over optimization, and the second is the standard deviation.
 
 ![table_4](table_4.png)
 
