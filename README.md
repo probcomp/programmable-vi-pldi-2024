@@ -263,16 +263,20 @@ Several of our experiments (the experiments which produce results for the tables
 
   "Ours" refers to the GenJAX VI timings. The rows of the table go by batch size, and the first array returned by the print out is the mean over several runs, the second is the standard deviation.
 
-* (**Table 2**): To generate Table 2 in the paper, we use [`pytest-benchmark`](https://pypi.org/project/pytest-benchmark/) to generate timing statistics. The print out will likely look something like this:
+* (**Table 2**): To generate Table 2 in the paper, we use [`pytest-benchmark`](https://pypi.org/project/pytest-benchmark/) to generate timing statistics. The print out will likely look something like this (the specific numbers will depend on your runtime environment -- but the general trend, that our timings are orders of magnitude faster than Pyro, doesn't depend on runtime):
   
-  ![Table 2 print out](table_2_print_out.png)
+  ![Table 2 print out](./table_2_print_out.png)
 
-  We took the `Mean` and `StdDev` column numbers to generate the results (of form $\text{Mean} \pm \text{StdDev}$) in Table 2. The labels and the numbers for the columns in Table 2 are mapped from the names in the print out e.g. 
+  We took the `Mean` and `StdDev` column numbers to generate the results (of form $\text{Mean} \pm \text{StdDev}$) in Table 2. 
+  
+  ![Table 2](./table_2.png)
+
+  The labels and the numbers for the columns in Table 2 are mapped from the names in the print out e.g. 
   * `genjax_reinforce` and `pyro[TraceGraph_ELBO]` -> REINFORCE
   * `genjax_mvd` -> MVD
   * `genjax_enum` and `pyro[TraceEnum_ELBO]` -> ENUM
-  * `genjax_iwae_mvd` -> IWAE + MVD
   * `genjax_iwae_reinforce` and `pyro_reinforce[RenyiELBO]` -> IWAE + REINFORCE
+  * `genjax_iwae_mvd` -> IWAE + MVD
 
   Each of the names on the right hand side of the arrows above correspond to particular _gradient estimators strategies_ used in variational inference. 
 
