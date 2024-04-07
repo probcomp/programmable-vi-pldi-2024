@@ -331,7 +331,7 @@ Several of our experiments (the experiments which produce results for the tables
   We've added spaces in the above example print out between the independent experiments involved in Table 4.
 
   A few things to note:
-  * "IWAE" label is equivalent to "IWELBO", as is the RenyiELBO name (from Pyro and NumPyro). 
+  * The IWAE label is equivalent to IWELBO, as is the RenyiELBO name (from the experiments on Pyro and NumPyro). 
   * All system comparison experiments (Pyro and NumPyro) are labeled with their names in this table. 
   * We did not report the standard deviation in this table: for each experiment, the first array is the mean over several trials, and the second is standard deviation.
   * Pyro and NumPyro use the negative ELBO as their objective (negative ELBO minimization), to compare with `genjax.vi` (and what we've done in Table 4) is apply a minus sign to the Pyro and NumPyro results.
