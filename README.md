@@ -272,7 +272,7 @@ Several of our experiments (the experiments which produce results for the tables
    array([0.03493173, 0.07299326, 0.18554626, 0.26609895, 0.55678135], dtype=float32))
   ```
 
-  "Ours" refers to the GenJAX VI timings. The rows of the table go by batch size, and the first array returned by the print out is the mean over several runs, the second is the standard deviation.
+  The "columns" of the print out match to the batch size: first array returned by the print out is the row of mean timings over several runs, the second row is the standard deviation of timings over those runs.
 
 * (**Table 2**): To generate Table 2 in the paper, we use [`pytest-benchmark`](https://pypi.org/project/pytest-benchmark/) to generate timing statistics. The print out will likely look something like this (the specific numbers will depend on your runtime environment -- but the general trend, that our timings are orders of magnitude faster than Pyro, doesn't depend on runtime):
 
