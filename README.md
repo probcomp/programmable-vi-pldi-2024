@@ -264,12 +264,16 @@ Several of our experiments (the experiments which produce results for the tables
   "Ours" refers to the GenJAX VI timings. The rows of the table go by batch size, and the first array returned by the print out is the mean over several runs, the second is the standard deviation.
 
 * (**Table 2**): To generate Table 2 in the paper, we use [`pytest-benchmark`](https://pypi.org/project/pytest-benchmark/) to generate timing statistics. The print out will likely look something like this (the specific numbers will depend on your runtime environment -- but the general trend, that our timings are orders of magnitude faster than Pyro, doesn't depend on runtime):
-  
-  ![Table 2 print out](./table_2_print_out.png)
+
+  <p align="center">
+  <img width="400px" src="./table_2_print_out.png"/>
+  </p>
 
   We took the `Mean` and `StdDev` column numbers to generate the results (of form $\text{Mean} \pm \text{StdDev}$) in Table 2. 
   
-  ![Table 2](./table_2.png)
+  <p align="center">
+  <img width="400px" src="./table_2.png"/>
+  </p>
 
   The labels and the numbers for the columns in Table 2 are mapped from the names in the print out e.g. 
   * `genjax_reinforce` and `pyro[TraceGraph_ELBO]` -> REINFORCE
