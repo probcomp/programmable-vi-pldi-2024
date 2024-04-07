@@ -261,15 +261,17 @@ Several of our experiments (the experiments which produce results for the tables
 
 * (**Table 1**): For Table 1, "Ours" refers to the GenJAX VI timings. The rows of the table go by batch size, and the first array returned by the print out is the mean over several runs, the second is the std deviation.
 
-* (**Table 2**): To generate Table 2 in the paper, we took the mean and std dev numbers from the `pytest-benchmark` print out. The labels for the columns in the table are mapped from the names e.g. 
+* (**Table 2**): To generate Table 2 in the paper, we use [`pytest-benchmark`](https://pypi.org/project/pytest-benchmark/) to generate timing statistics. The print out will likely look something like this:
+  
+  ![Table 2 print out](./table_2_print_out.png)
+
+  The labels for the columns in the table are mapped from the names e.g. 
   * `genjax_reinforce` and `pyro_reinforce[TraceGraph_ELBO]` -> REINFORCE
   * `genjax_mvd` -> MVD
   * `genjax_iwae_mvd` -> IWAE + MVD
   * `pyro_reinforce[RenyiELBO]` -> IWAE + REINFORCE
 
-  and so on. Each of these names correspond to particular _gradient estimators strategies_ used in variational inference. The print out will likely look something like this:
-
-  ![Table 2 print out](./table_2_print_out.png)
+  and so on. Each of these names correspond to particular _gradient estimators strategies_ used in variational inference. 
 
 * (**Table 4**): For Table 4, the "IWAE" label is equivalent to "IWELBO", as is the RenyiELBO name (from Pyro and NumPyro). All system comparison experiments (Pyro and NumPyro) are labeled with their names in this table. We did not report standard deviation in this table, but for each experiment, the first array is the mean over several trials, and the second is standard deviation.
 
