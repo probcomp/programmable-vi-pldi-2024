@@ -259,7 +259,18 @@ Several of our experiments (the experiments which produce results for the tables
 **Sign convention** Systems which implement variational optimization can vary in terms of their sign convention for objective values. In our system, we consider _maximization_ (maximizing the ELBO). Pyro and NumPyro consider _minimization_ (minimizing the negative ELBO). These two processes are equivalent. Note that our print outs don't choose a standard, but our reported results do (we convert Pyro and NumPyro negative objective values to objective values by multiplying by -1).
 
 
-* (**Table 1**): For Table 1, you'll see a print out which looks like the following:
+* (**Table 1**): For Table 1, you'll see a print out which looks like the following (specific numbers will depend on your runtime environment):
+
+  ```
+  GenJAX VI timings:
+  Batch sizes: [64, 128, 256, 512, 1024]
+  (array([0.17483307, 0.23848654, 0.40820748, 0.74701416, 1.5442369 ], dtype=float32), 
+   array([0.08583035, 0.06719527, 0.13345473, 0.24723288, 0.5431073 ], dtype=float32))
+  Handcoded timings:
+  Batch sizes: [64, 128, 256, 512, 1024]
+  (array([0.13013603, 0.21644622, 0.43758354, 0.75196713, 1.5987686 ], dtype=float32), 
+   array([0.03493173, 0.07299326, 0.18554626, 0.26609895, 0.55678135], dtype=float32))
+  ```
 
   "Ours" refers to the GenJAX VI timings. The rows of the table go by batch size, and the first array returned by the print out is the mean over several runs, the second is the standard deviation.
 
