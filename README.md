@@ -286,12 +286,12 @@ We took the `Mean` and `StdDev` column numbers to generate the results (of form 
 
 ![table_fn](table_2.png)
 
-The labels and the numbers for the columns in Table 2 are mapped from the names in the print out e.g. 
-* `genjax_reinforce` and `pyro[TraceGraph_ELBO]` -> REINFORCE
-* `genjax_mvd` -> MVD
-* `genjax_enum` and `pyro[TraceEnum_ELBO]` -> ENUM
-* `genjax_iwae_reinforce` and `pyro_reinforce[RenyiELBO]` -> IWAE + REINFORCE
-* `genjax_iwae_mvd` -> IWAE + MVD
+The labels and the numbers for the columns in Table 2 are mapped from the named rows in the print out, according to the `Mean` and `StdDev` column numbers (as mentioned above):
+* `test_benchmark_genjax_reinforce` and `test_benchmark_pyro[TraceGraph_ELBO]` $\rightarrow$ REINFORCE
+* `test_benchmark_genjax_mvd` $\rightarrow$ MVD
+* `test_benchmark_genjax_enum` and `test_benchmark_pyro[TraceEnum_ELBO]` $\rightarrow$ ENUM
+* `test_benchmark_genjax_iwae_reinforce` and `test_benchmark_pyro_reinforce[RenyiELBO]` $\rightarrow$ IWAE + REINFORCE
+* `test_benchmark_genjax_iwae_mvd` $\rightarrow$ IWAE + MVD
 
 Each of the names on the right hand side of the arrows above correspond to particular _gradient estimators strategies_ used in variational inference. 
 
