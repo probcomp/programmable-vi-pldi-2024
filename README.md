@@ -267,7 +267,9 @@ Several of our experiments (the experiments which produce results for the tables
   * `genjax_iwae_mvd` -> IWAE + MVD
   * `pyro_reinforce[RenyiELBO]` -> IWAE + REINFORCE
 
-  and so on. Each of these names correspond to particular _gradient estimators strategies_ used in variational inference.
+  and so on. Each of these names correspond to particular _gradient estimators strategies_ used in variational inference. The print out will likely look something like this:
+
+  ![Table 2 print out](./table_2_print_out.png)
 
 * (**Table 4**): For Table 4, the "IWAE" label is equivalent to "IWELBO", as is the RenyiELBO name (from Pyro and NumPyro). All system comparison experiments (Pyro and NumPyro) are labeled with their names in this table. We did not report standard deviation in this table, but for each experiment, the first array is the mean over several trials, and the second is standard deviation.
 
