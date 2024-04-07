@@ -343,7 +343,7 @@ Pyro IWAE(K = 5):
 (tensor(7.8314), tensor(2.4545))
 ```
 
-the first element is the mean objective value over optimization, and the second is the standard deviation.
+the first element is the mean objective value over optimization, and the second is the standard deviation. We use these numbers to generate Table 4:
 
 ![table_4](table_4.png)
 
