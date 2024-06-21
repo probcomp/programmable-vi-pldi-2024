@@ -24,6 +24,7 @@ pyro-ppl = "1.8.6"
 matplotlib = "3.6.2"
 seaborn = "0.12.1"
 jupyterlab = "^4.1.4"
+manim = "^0.18.1"
 
 [build-system]
 requires = ["poetry-core"]
