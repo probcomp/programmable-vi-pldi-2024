@@ -1,0 +1,23 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{unicode-math}
+\usepackage{bm}
+\usepackage{lmodern}
+\usepackage{minted}
+\usepackage{fontspec}
+\usepackage[usenames,dvipsnames]{xcolor} 
+\begin{document}
+\begin{minted}[numbersep=5pt,baselinestretch=1.0,escapeinside=||,mathescape=true,samepage]{python}
+@genjax.adev.E
+def elbo(p, mu_1, mu_2):
+  v = flip_reinforce_adev(p)
+  (r, s) = (mu_1, 1.0) if v else (mu_2, 1.0)
+  x = normal_reparam_adev(r, s)
+  tr = {"v": v, "x": x}
+  guide_p = (flip_density(v, p) * 
+             normal_density(x, r, s))
+  model_p = density(model)(tr)
+  return log(model_p / guide_p)
+\end{minted}
+\end{document}

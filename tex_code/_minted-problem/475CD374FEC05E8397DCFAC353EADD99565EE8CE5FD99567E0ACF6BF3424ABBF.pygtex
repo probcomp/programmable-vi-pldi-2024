@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{n+nd}{@genjax}\PYG{o}{.}\PYG{n}{adev}\PYG{o}{.}\PYG{n}{E}
+\PYG{k}{def} \PYG{n+nf}{elbo}\PYG{p}{(}\PYG{n}{p}\PYG{p}{,} \PYG{n}{mu\PYGZus{}1}\PYG{p}{,} \PYG{n}{mu\PYGZus{}2}\PYG{p}{)}\PYG{p}{:}
+  \PYG{p}{(}\PYG{n}{tr}\PYG{p}{,} \PYG{n}{guide\PYGZus{}p}\PYG{p}{)} \PYG{o}{=} \PYG{n}{sim}\PYG{p}{(}\PYG{n}{guide}\PYG{p}{)}\PYG{p}{(}\PYG{n}{p}\PYG{p}{,} \PYG{n}{mu\PYGZus{}1}\PYG{p}{,} \PYG{n}{mu\PYGZus{}2}\PYG{p}{)}
+  \PYG{n}{model\PYGZus{}p} \PYG{o}{=} \PYG{n}{density}\PYG{p}{(}\PYG{n}{model}\PYG{p}{)}\PYG{p}{(}\PYG{n}{tr}\PYG{p}{)}
+  \PYG{k}{return} \PYG{n}{log}\PYG{p}{(}\PYG{n}{model\PYGZus{}p} \PYG{o}{/} \PYG{n}{guide\PYGZus{}p}\PYG{p}{)}
+\end{Verbatim}

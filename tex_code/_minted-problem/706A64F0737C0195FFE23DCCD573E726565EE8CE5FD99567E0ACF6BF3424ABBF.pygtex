@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k}{def} \PYG{n+nf}{density\PYGZus{}model}\PYG{p}{(}\PYG{n}{tr}\PYG{p}{)}\PYG{p}{:}
+  \PYG{n}{density} \PYG{o}{=} \PYG{n}{flip\PYGZus{}density}\PYG{p}{(}\PYG{n}{tr}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{v}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,} \PYG{l+m+mf}{0.8}\PYG{p}{)}
+  \PYG{n}{v} \PYG{o}{=} \PYG{n}{tr}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{v}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+  \PYG{p}{(}\PYG{n}{r}\PYG{p}{,} \PYG{n}{s}\PYG{p}{)} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mf}{2.0}\PYG{p}{,} \PYG{l+m+mf}{1.0}\PYG{p}{)} \PYG{k}{if} \PYG{n}{v} \PYG{k}{else} \PYG{p}{(}\PYG{l+m+mf}{3.0}\PYG{p}{,} \PYG{l+m+mf}{0.5}\PYG{p}{)}
+  \PYG{n}{density} \PYG{o}{+}\PYG{o}{=} \PYG{n}{normal\PYGZus{}density}\PYG{p}{(}\PYG{n}{tr}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{x}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,} \PYG{n}{r}\PYG{p}{,} \PYG{n}{s}\PYG{p}{)}
+  \PYG{n}{x} \PYG{o}{=} \PYG{n}{tr}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{x}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+  \PYG{n}{density} \PYG{o}{+}\PYG{o}{=} \PYG{n}{normal\PYGZus{}density}\PYG{p}{(}\PYG{l+m+mf}{4.0}\PYG{p}{,} \PYG{n}{x} \PYG{o}{*} \PYG{n}{x}\PYG{p}{,} \PYG{l+m+mf}{0.1}\PYG{p}{)}
+  \PYG{k}{return} \PYG{n}{density}
+\end{Verbatim}
